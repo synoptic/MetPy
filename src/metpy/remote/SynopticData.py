@@ -42,15 +42,34 @@ import pandas as pd
 import json
 import urllib.request
 import numpy as np
-import datetime
-import pytz
+from datetime import datetime,timezone,timedelta
+#import pytz
+import sys
+
+
+# Need to map incompatible Synoptic units to a form that can be read by Pint.
+# Simple dictionary is easier in this case than adding pint alias' since we
+# return unit strings and not pint unit definitions
+units_map = {'Celsius': 'degC',
+             'Fahrenheit': 'degF',
+             'Pascals': 'pascal',
+             'Millimeters': 'millimeter',
+             'Degrees': 'degree',
+             'Statute_miles': 'us_statute_mile',
+             'gm': 'gram'}
+
 
 def append_param(url, dictionary):
+    '''
+    '''
     for key in dictionary.keys():
         url += key + '=' + str(dictionary[key]) + '&'
     return url
 
+
 def return_stn_df(data, index):
+    '''
+    '''
     stid = data['STATION'][index]['STID']
     lat = data['STATION'][index]['LATITUDE']
     lon = data['STATION'][index]['LONGITUDE']
@@ -68,17 +87,18 @@ def return_stn_df(data, index):
                 data_out[k] = data['STATION'][index]['OBSERVATIONS'][k]
     # Generate multi-index dataframe
     multi_index = pd.MultiIndex.from_product([[stid], pd.to_datetime(dattim)], \
-                                            names=["stid", "dattim"])
-    df = pd.DataFrame(data_out, index=multi_index)
-    
-    return df, meta_df
+                                            names=["stid", "dattim"]
+                                             )
+    data_df = pd.DataFrame(data_out, index=multi_index)
+    return data_df, meta_df
 
 
 # Class instantiation - initialize w/ API token, station, time, and opt_params
 class TimeSeries():
+    '''
+    '''
     def __init__(self, token, station={}, time={}, opt_params={}):
         '''
-        #region
         Parameters
         ----------
         station: `dic`
@@ -105,8 +125,6 @@ class TimeSeries():
                     'vars': 'air_temp, wind_speed'}
         time = {'recent': 120}
         opt_params = {'units': 'temp|C, speed|mps'}
-
-        #endregion
         '''
         # Confirm the station & time keys are valid
         stn_keys = ['stid','state','country','nwszone','nwsfirezone','cwa',\
@@ -116,26 +134,27 @@ class TimeSeries():
             unique = set(station.keys()) - set(stn_keys)
             if len(unique)>0:
                 print('Invalid station parameters: {}'.format(unique))
-                return
+                sys.exit()
             else:
                 self.station = station
         else:
             print('At least one station parameter is required')
-            return
-        
+            sys.exit()
+
         if time and set(time.keys()).intersection(set(['start','end','recent'])) == set(time.keys()):
             self.time = time
         else:
             unique = set(time.keys()) - set(['start','end','recent'])
             print('Invalid time paramaters: {}'.format(unique))
-            return
+            sys.exit()
 
         self.token = token
         self.opt_params = opt_params
 
+
     def estimate_usage(self):
         '''
-        THIS NEEDS TO BE RETHOUGHT FOR RECENT DATA
+        TODO: THIS NEEDS TO BE RETHOUGHT -- OBRANGE IS APPARENTLY NOT FUNCTIONAL
 
         Make a call to metadata if necessary and estimate the data usage 
         from the current request
@@ -155,16 +174,16 @@ class TimeSeries():
         
         # Timing for url
         if self.time:
+            tz = timezone.utc
             if 'recent' in self.time.keys():
-                tz = pytz.timezone('UTC')
-                end = datetime.datetime.now(tz)
-                strt = end-datetime.timedelta(minutes=self.time['recent'])
+                end = datetime.now(tz)
+                strt = end - timedelta(minutes=self.time['recent'])
             else:
-                strt = datetime.datetime.strptime(str(self.time['start']), '%Y%m%d%H%M')
-                end = datetime.datetime.strptime(str(self.time['end']), '%Y%m%d%H%M')
+                strt = datetime.strptime(str(self.time['start']), '%Y%m%d%H%M').replace(tzinfo=timezone.utc)
+                end = datetime.strptime(str(self.time['end']), '%Y%m%d%H%M').replace(tzinfo=timezone.utc)
             # Check if time is too recent: if so, set request to return active
             # stations. Otherwise use obrange
-            if strt > datetime.datetime.now(tz) - datetime.timedelta(days=30):
+            if strt > datetime.now(tz) - timedelta(days=30):
                 self.meta_url += 'status=active&'
             else:
                 end = end.strftime('%Y%m%d')
@@ -185,7 +204,9 @@ class TimeSeries():
         
         # Check that the API call was valid
         if metadata['SUMMARY']['RESPONSE_CODE'] != 1:
+            print('Usage estimation failed with API error:')
             print(metadata['SUMMARY']['RESPONSE_MESSAGE'])
+            sys.exit()
         else:
             # Estimate data usage from the metadata return
             if 'recent' in self.time.keys():
@@ -232,6 +253,7 @@ class TimeSeries():
         print ('API Request url: \n {}'.format(self.url))        
         response = urllib.request.urlopen(self.url)
         self.data = json.loads(response.read())
+        print('Data Request Successful!')
 
         # Build single dataframe with all data
         for i in range(len(self.data['STATION'])):
@@ -243,8 +265,19 @@ class TimeSeries():
                 meta_df = pd.concat([meta_df, meta_df1], axis=0)
         self.data_df = data_df
         self.meta_df = meta_df
-        print('Data Request Successful!')
-            
-        return
 
 
+        units = self.data['UNITS']
+        # Change unit variable names to be pint-compatible
+        for u in units:
+            if units[u] in units_map:
+                units[u] = units_map[units[u]]
+        # Build out a units dictionary
+        unit_dic = {}
+        for column in data_df.columns:
+            for u_name in units.keys():
+                if column.find(u_name) != -1:
+                    unit = units[u_name]
+            unit_dic.update({column: unit})
+
+        return data_df, meta_df, unit_dic
