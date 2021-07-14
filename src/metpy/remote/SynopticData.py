@@ -17,20 +17,15 @@ Rules of the Road
 =========
 Structure
 =========
-class: 
-    SynopticData
-
-Methods - service-based:
-    SynopticData.timeseries
-    SynopticData.latest
-    SynopticData.nearest_time
-    SynopticData.precipitation
-    SynopticData.example (include an example to get )
+classes:
+    TimeSeries
+    Latest
+    Nearest
 
 =============
 Functionality
 =============
-Each method does the following:
+Each class does the following:
     1) Build URL string for API w/ user-defined args
     2) Make request to Synoptic's API
     3) Parse/format incoming data & treat units appropriately
@@ -41,9 +36,9 @@ Each method does the following:
 import pandas as pd
 import json
 import urllib.request
+import urllib.parse
 import numpy as np
 from datetime import datetime,timezone,timedelta
-#import pytz
 import sys
 
 
@@ -56,47 +51,68 @@ units_map = {'Celsius': 'degC',
              'Millimeters': 'millimeter',
              'Degrees': 'degree',
              'Statute_miles': 'us_statute_mile',
-             'gm': 'gram'}
+             'gm': 'gram',
+             'Inches': 'inch',
+             'Miles/hour': 'mile/hour',
+             'ug/m3': 'ug/m**3',
+             'ft3/s': 'ft**3/s'}
 
 
-def append_param(url, dictionary):
-    '''
-    '''
-    for key in dictionary.keys():
-        url += key + '=' + str(dictionary[key]) + '&'
-    return url
+def build_query_string(qsp_dic):
+    # Convert any lists to comma-separated strings
+    for k in qsp_dic.keys():
+        if isinstance(qsp_dic[k], list):
+            qsp_dic[k] = ','.join(map(str,qsp_dic[k]))
+    # Build query string
+    query_string = urllib.parse.urlencode(qsp_dic)
+    return query_string
 
 
-def return_stn_df(data, index):
+def return_stn_df(data, stn_index, date_format, qc_flag):
     '''
     '''
-    stid = data['STATION'][index]['STID']
-    lat = data['STATION'][index]['LATITUDE']
-    lon = data['STATION'][index]['LONGITUDE']
-    elev = data['STATION'][index]['ELEVATION']
+    # Site meta
+    stid = data['STATION'][stn_index]['STID']
+    lat = data['STATION'][stn_index]['LATITUDE']
+    lon = data['STATION'][stn_index]['LONGITUDE']
+    elev = data['STATION'][stn_index]['ELEVATION']
     meta_df = pd.DataFrame([[stid, lon, lat, elev]], columns=["stid", "lon", "lat", "elev"])
     meta_df.set_index('stid', inplace=True)
 
-    data_out = {}
-    for key in data['STATION'][index]['SENSOR_VARIABLES'].keys():
-        d = data['STATION'][index]['SENSOR_VARIABLES'][key]
-        for k in d.keys():
-            if k == 'date_time':
-                dattim = data['STATION'][index]['OBSERVATIONS'][k]
-            else:
-                data_out[k] = data['STATION'][index]['OBSERVATIONS'][k]
-    # Generate multi-index dataframe
-    multi_index = pd.MultiIndex.from_product([[stid], pd.to_datetime(dattim)], \
-                                            names=["stid", "dattim"]
+    # Site data
+    data_out = data['STATION'][stn_index]['OBSERVATIONS'].copy()
+    datetime = pd.to_datetime(data_out['date_time'], format=(date_format))
+    del data_out['date_time']
+    multi_index = pd.MultiIndex.from_product([[stid], datetime], names=["stid", "dattim"]
                                              )
     data_df = pd.DataFrame(data_out, index=multi_index)
-    return data_df, meta_df
+
+    # Build dataframe of qc_flags if qc_flags were requested
+    if qc_flag == 1:
+        qc_out = {}
+        if 'QC' in data['STATION'][stn_index].keys():
+            qc_out = data['STATION'][stn_index]['QC'].copy()
+        qc_df = pd.DataFrame(qc_out, index=multi_index)
+    else:
+        qc_df = None
+    return data_df, meta_df, qc_df
+
+
+def variable_details(data, stn_index):
+    sensor_dic = data['STATION'][stn_index]['SENSOR_VARIABLES']
+    position = {}
+    derived_from = {}
+    for key in sensor_dic.keys():
+        for child_key in sensor_dic[key].keys():
+            if 'position' in sensor_dic[key][child_key].keys():
+                position.update({child_key: float(sensor_dic[key][child_key]['position'])})
+            if 'derived_from' in sensor_dic[key][child_key].keys():
+                derived_from.update({child_key: sensor_dic[key][child_key]['derived_from']})
+    return position, derived_from
 
 
 # Class instantiation - initialize w/ API token, station, time, and opt_params
 class TimeSeries():
-    '''
-    '''
     def __init__(self, token, station={}, time={}, opt_params={}):
         '''
         Parameters
@@ -126,30 +142,31 @@ class TimeSeries():
         time = {'recent': 120}
         opt_params = {'units': 'temp|C, speed|mps'}
         '''
-        # Confirm the station & time keys are valid
+        # Confirm the station keys are valid
         stn_keys = ['stid','state','country','nwszone','nwsfirezone','cwa',\
             'gacc','subgacc','county','vars','varsoperator','network',\
             'radius','bbox','status','complete','fields']
         if station:
-            unique = set(station.keys()) - set(stn_keys)
-            if len(unique)>0:
-                print('Invalid station parameters: {}'.format(unique))
-                sys.exit()
+            invalid_stns = set(station.keys()) - set(stn_keys)
+            if len(invalid_stns) > 0:
+                sys.exit('Invalid station parameters: {}'.format(invalid_stns))
             else:
                 self.station = station
         else:
-            print('At least one station parameter is required')
-            sys.exit()
+            sys.exit('At least one station parameter is required')
 
-        if time and set(time.keys()).intersection(set(['start','end','recent'])) == set(time.keys()):
-            self.time = time
+        # Confirm the time keys are valid
+        if time:
+            invalid_time = set(time.keys()) - set(['start', 'end', 'recent'])
+            if len(invalid_time) > 0:
+                sys.exit('Invalid time parameters: {}'.format(invalid_time))
+            else:
+                self.time = time
         else:
-            unique = set(time.keys()) - set(['start','end','recent'])
-            print('Invalid time paramaters: {}'.format(unique))
-            sys.exit()
-
+            sys.exit("time parameters of 'start' and 'end' or 'recent' are required")
         self.token = token
         self.opt_params = opt_params
+        self.url0 = "https://api.synopticdata.com/v2/stations/timeseries?"
 
 
     def estimate_usage(self):
@@ -170,6 +187,7 @@ class TimeSeries():
                     pass
                 else:
                     meta_dic[key] = self.station[key]
+            #NOTE: append_param is now deprecated
             self.meta_url = append_param(self.meta_url, meta_dic)
         
         # Timing for url
@@ -188,7 +206,7 @@ class TimeSeries():
             else:
                 end = end.strftime('%Y%m%d')
                 strt = strt.strftime('%Y%m%d')
-                self.meta_url += 'obrange='+strt+','+end+'&'
+                self.meta_url += 'obrange=' + strt + ',' + end + '&'
                 
         # Add sensor variables -- don't confirm that the sensor variables
         # are all valid for the exact time period requested, but use this
@@ -232,52 +250,93 @@ class TimeSeries():
             print("Roughly {}-{} service units (SU's) will be used".format(usage_min, usage_max))
 
     def request_data(self):
-        #-----------------
-        # Build url string
-        #-----------------
-        url0 = 'https://api.synopticdata.com/v2/stations/timeseries?'
+        '''
+        Build url string, send data request, and return data, metadata, and units
 
-        # Append the user-defined parameters to url string
-        self.url = append_param(url0, self.station)
-        self.url = append_param(self.url, self.time)
-
+        Returns:
+            data_df: Pandas dataframe with data columns, multi-indexed by station
+                     and dattim
+            meta_df: Pandas dataframe with station latitude, longitude, and elev
+            units: Dictionary of units for each data variable in data_df
+        '''
         # Default is to call on derived precip unless explicitly set to 0 
         if 'vars' in self.station.keys():
             if 'precip' in self.station['vars'] and 'precip' not in self.opt_params.keys():
                 self.opt_params['precip'] = 1
+
+        # Check if there is a qc_flag request
+        if ('qc_flag','on') in self.opt_params.items():
+            qc_flag = 1
+            self.qc_flag = 1
+        elif ('qc','on') in self.opt_params.items() and ('qc_flag','off') not in self.opt_params.items():
+            qc_flag = 1
+            self.qc_flag = 1
+        else:
+            qc_flag = 0
+            self.qc_flag = 0
+
+        # Build single dictionary for url query string
+        qsp_dic = self.station
+        if self.time:
+            qsp_dic.update(self.time)
         if self.opt_params:
-            self.url = append_param(self.url, self.opt_params)
-        
-        # Append user token, print url string, and make data request
-        self.url = self.url + 'token='+self.token
-        print ('API Request url: \n {}'.format(self.url))        
+            qsp_dic.update(self.opt_params)
+        qsp_dic.update({'token': self.token})
+        query_string = build_query_string(qsp_dic)
+        self.url = self.url0 + query_string
+
+        #print url string, and make data request
+        print ('API Request url: \n {}'.format(self.url))
         response = urllib.request.urlopen(self.url)
         self.data = json.loads(response.read())
-        print('Data Request Successful!')
 
-        # Build single dataframe with all data
-        for i in range(len(self.data['STATION'])):
-            if i == 0:
-                data_df, meta_df = return_stn_df(self.data, i)
+        # Set time format
+        if 'timeformat' in self.opt_params.keys():
+            time_format = self.opt_params['timeformat']
+        else:
+            time_format = '%Y-%m-%d %H:%M'
+
+        # If request returns 0 results, print as such & exit
+        if self.data['SUMMARY']['RESPONSE_CODE'] != 1:
+            sys.exit(self.data['SUMMARY']['RESPONSE_MESSAGE'])
+        # Else build out data & metadata dataframes, and units dic
+        else:
+            for i in range(len(self.data['STATION'])):
+                if i == 0:
+                    data_df, meta_df, qc_df = return_stn_df(self.data, i, time_format, qc_flag)
+                    position, derived_from = variable_details(self.data, i)
+                else:
+                    df1, meta1, qc1 = return_stn_df(self.data, i, time_format, qc_flag)
+                    data_df = pd.concat([data_df, df1], axis=0)
+                    meta_df = pd.concat([meta_df, meta1], axis=0)
+                    position1, derived_from1 = variable_details(self.data, i)
+                    position.update(position1)
+                    derived_from.update(derived_from1)
+                    if qc_flag == 1:
+                        qc_df = pd.concat([qc_df, qc1], axis=0)
+            self.data_df = data_df
+            self.meta_df = meta_df
+            self.variable_position = position
+            self.variable_derived_from = derived_from
+
+            # Change unit variable names to be pint-compatible & build out dic
+            units = self.data['UNITS']
+            for u in units:
+                if units[u] in units_map:
+                    units[u] = units_map[units[u]]
+            unit_dic = {}
+            for column in data_df.columns:
+                for u_name in units.keys():
+                    if column.find(u_name) != -1:
+                        unit = units[u_name]
+                unit_dic.update({column: unit})
+
+            if qc_flag == 1:
+                # If there are no columns in the qc df, there are no flags. Reset
+                # to None
+                if len(qc_df.columns) == 0:
+                    qc_df = None
+                self.qc_df = qc_df
+                return data_df, meta_df, qc_df, unit_dic
             else:
-                df1, meta_df1 = return_stn_df(self.data, i)
-                data_df = pd.concat([data_df, df1], axis=0)
-                meta_df = pd.concat([meta_df, meta_df1], axis=0)
-        self.data_df = data_df
-        self.meta_df = meta_df
-
-
-        units = self.data['UNITS']
-        # Change unit variable names to be pint-compatible
-        for u in units:
-            if units[u] in units_map:
-                units[u] = units_map[units[u]]
-        # Build out a units dictionary
-        unit_dic = {}
-        for column in data_df.columns:
-            for u_name in units.keys():
-                if column.find(u_name) != -1:
-                    unit = units[u_name]
-            unit_dic.update({column: unit})
-
-        return data_df, meta_df, unit_dic
+                return data_df, meta_df, unit_dic
