@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>parcel_profile_with_lcl_as_dataset &#8212; MetPy 1.0dev</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet" />
@@ -27,8 +28,9 @@
 
     
 
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
@@ -37,7 +39,7 @@
     
   <link rel="preload" as="script" href="../../_static/js/index.1e043a052b0af929e4d8.js">
 
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -45,7 +47,7 @@
     <link rel="shortcut icon" href="../../_static/metpy_32x32.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="significant_tornado" href="metpy.calc.significant_tornado.html" />
+    <link rel="next" title="showalter_index" href="metpy.calc.showalter_index.html" />
     <link rel="prev" title="parcel_profile_with_lcl" href="metpy.calc.parcel_profile_with_lcl.html" />
     
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -323,6 +325,11 @@
     </a>
    </li>
    <li class="toctree-l3">
+    <a class="reference internal" href="metpy.calc.scale_height.html">
+     scale_height
+    </a>
+   </li>
+   <li class="toctree-l3">
     <a class="reference internal" href="metpy.calc.specific_humidity_from_dewpoint.html">
      specific_humidity_from_dewpoint
     </a>
@@ -393,6 +400,11 @@
     </a>
    </li>
    <li class="toctree-l3">
+    <a class="reference internal" href="metpy.calc.k_index.html">
+     k_index
+    </a>
+   </li>
+   <li class="toctree-l3">
     <a class="reference internal" href="metpy.calc.lcl.html">
      lcl
     </a>
@@ -445,6 +457,11 @@
    <li class="toctree-l3 current active">
     <a class="current reference internal" href="#">
      parcel_profile_with_lcl_as_dataset
+    </a>
+   </li>
+   <li class="toctree-l3">
+    <a class="reference internal" href="metpy.calc.showalter_index.html">
+     showalter_index
     </a>
    </li>
    <li class="toctree-l3">
@@ -781,7 +798,7 @@
  </li>
  <li class="toctree-l2">
   <a class="reference internal" href="metpy.plots.html">
-   plots
+   metpy.plots
   </a>
  </li>
  <li class="toctree-l2">
@@ -832,11 +849,11 @@
               
               <div>
                 
-  <div class="section" id="parcel-profile-with-lcl-as-dataset">
+  <section id="parcel-profile-with-lcl-as-dataset">
 <h1>parcel_profile_with_lcl_as_dataset<a class="headerlink" href="#parcel-profile-with-lcl-as-dataset" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="metpy.calc.parcel_profile_with_lcl_as_dataset">
-<code class="sig-prename descclassname"><span class="pre">metpy.calc.</span></code><code class="sig-name descname"><span class="pre">parcel_profile_with_lcl_as_dataset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dewpoint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/metpy/calc/thermo.html#parcel_profile_with_lcl_as_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metpy.calc.parcel_profile_with_lcl_as_dataset" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="metpy.calc.parcel_profile_with_lcl_as_dataset">
+<span class="sig-prename descclassname"><span class="pre">metpy.calc.</span></span><span class="sig-name descname"><span class="pre">parcel_profile_with_lcl_as_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dewpoint</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metpy.calc.parcel_profile_with_lcl_as_dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the profile a parcel takes through the atmosphere, returning a Dataset.</p>
 <p>The parcel starts at <em class="xref py py-obj">temperature</em>, and <a class="reference internal" href="metpy.calc.dewpoint.html#metpy.calc.dewpoint" title="metpy.calc.dewpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dewpoint</span></code></a>, lifted up
 dry adiabatically to the LCL, and then moist adiabatically from there.
@@ -854,7 +871,7 @@ the same level as the first <em class="xref py py-obj">pressure</em> data point.
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>profile</strong> (<a class="reference external" href="https://xarray.pydata.org/en/stable/generated/xarray.Dataset.html#xarray.Dataset" title="(in xarray v0.17.1.dev0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">xarray.Dataset</span></code></a>) – The interpolated profile with three data variables: ambient_temperature,
+<dd class="field-even"><p><strong>profile</strong> (<a class="reference external" href="https://xarray.pydata.org/en/stable/generated/xarray.Dataset.html#xarray.Dataset" title="(in xarray v0.19.1.dev6)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">xarray.Dataset</span></code></a>) – The interpolated profile with three data variables: ambient_temperature,
 ambient_dew_point, and profile_temperature, all of which are on an isobaric
 coordinate.</p>
 </dd>
@@ -867,7 +884,7 @@ coordinate.</p>
 <p>Only functions on 1D profiles (not higher-dimension vertical cross sections or grids).</p>
 </dd></dl>
 
-<div style='clear:both'></div></div>
+<div style='clear:both'></div></section>
 
 
               </div>
@@ -876,7 +893,7 @@ coordinate.</p>
               <div class='prev-next-bottom'>
                 
     <a class='left-prev' id="prev-link" href="metpy.calc.parcel_profile_with_lcl.html" title="previous page">parcel_profile_with_lcl</a>
-    <a class='right-next' id="next-link" href="metpy.calc.significant_tornado.html" title="next page">significant_tornado</a>
+    <a class='right-next' id="next-link" href="metpy.calc.showalter_index.html" title="next page">showalter_index</a>
 
               </div>
               
@@ -903,9 +920,9 @@ coordinate.</p>
     <footer class="footer mt-5 mt-md-0">
   <div class="container">
     <p>
-          &copy; Copyright 2008–2021, MetPy Developers. Development supported by National Science Foundation grants AGS-1344155, OAC-1740315, and AGS-1901712.<br/>
-        Last updated on Apr 12, 2021 at 17:36:36.<br/>
-        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+          &copy; Copyright 2008–2021, MetPy Developers.Development is supported by Unidata and the National Science Foundation..<br/>
+        Last updated on Aug 13, 2021 at 16:38:07.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
     </p>
   </div>
 </footer>

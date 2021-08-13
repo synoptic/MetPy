@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>isentropic_interpolation &#8212; MetPy 1.0dev</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet" />
@@ -27,8 +28,9 @@
 
     
 
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
@@ -37,7 +39,7 @@
     
   <link rel="preload" as="script" href="../../_static/js/index.1e043a052b0af929e4d8.js">
 
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -323,6 +325,11 @@
     </a>
    </li>
    <li class="toctree-l3">
+    <a class="reference internal" href="metpy.calc.scale_height.html">
+     scale_height
+    </a>
+   </li>
+   <li class="toctree-l3">
     <a class="reference internal" href="metpy.calc.specific_humidity_from_dewpoint.html">
      specific_humidity_from_dewpoint
     </a>
@@ -393,6 +400,11 @@
     </a>
    </li>
    <li class="toctree-l3">
+    <a class="reference internal" href="metpy.calc.k_index.html">
+     k_index
+    </a>
+   </li>
+   <li class="toctree-l3">
     <a class="reference internal" href="metpy.calc.lcl.html">
      lcl
     </a>
@@ -445,6 +457,11 @@
    <li class="toctree-l3">
     <a class="reference internal" href="metpy.calc.parcel_profile_with_lcl_as_dataset.html">
      parcel_profile_with_lcl_as_dataset
+    </a>
+   </li>
+   <li class="toctree-l3">
+    <a class="reference internal" href="metpy.calc.showalter_index.html">
+     showalter_index
     </a>
    </li>
    <li class="toctree-l3">
@@ -781,7 +798,7 @@
  </li>
  <li class="toctree-l2">
   <a class="reference internal" href="metpy.plots.html">
-   plots
+   metpy.plots
   </a>
  </li>
  <li class="toctree-l2">
@@ -832,11 +849,11 @@
               
               <div>
                 
-  <div class="section" id="isentropic-interpolation">
+  <section id="isentropic-interpolation">
 <h1>isentropic_interpolation<a class="headerlink" href="#isentropic-interpolation" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="metpy.calc.isentropic_interpolation">
-<code class="sig-prename descclassname"><span class="pre">metpy.calc.</span></code><code class="sig-name descname"><span class="pre">isentropic_interpolation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">levels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertical_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottom_up_search</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/metpy/calc/thermo.html#isentropic_interpolation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metpy.calc.isentropic_interpolation" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="metpy.calc.isentropic_interpolation">
+<span class="sig-prename descclassname"><span class="pre">metpy.calc.</span></span><span class="sig-name descname"><span class="pre">isentropic_interpolation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">levels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertical_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottom_up_search</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metpy.calc.isentropic_interpolation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Interpolate data in isobaric coordinates to isentropic coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -877,7 +894,7 @@ obtain a xarray Dataset instead, use <a class="reference internal" href="metpy.c
 </div>
 </dd></dl>
 
-<div style='clear:both'></div></div>
+<div style='clear:both'></div></section>
 
 
               </div>
@@ -913,9 +930,9 @@ obtain a xarray Dataset instead, use <a class="reference internal" href="metpy.c
     <footer class="footer mt-5 mt-md-0">
   <div class="container">
     <p>
-          &copy; Copyright 2008–2021, MetPy Developers. Development supported by National Science Foundation grants AGS-1344155, OAC-1740315, and AGS-1901712.<br/>
-        Last updated on Apr 12, 2021 at 17:36:36.<br/>
-        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+          &copy; Copyright 2008–2021, MetPy Developers.Development is supported by Unidata and the National Science Foundation..<br/>
+        Last updated on Aug 13, 2021 at 16:38:07.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
     </p>
   </div>
 </footer>

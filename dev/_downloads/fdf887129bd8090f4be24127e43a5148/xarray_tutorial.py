@@ -61,7 +61,7 @@ temperature
 #
 # If you are more interested in learning about xarray's terminology and data structures, see
 # the `terminology section <http://xarray.pydata.org/en/stable/terminology.html>`_ of xarray's
-# documenation.
+# documentation.
 #
 # Coordinates and Coordinate Reference Systems
 # --------------------------------------------
@@ -223,13 +223,13 @@ heights_at_45_north
 #########################################################################
 # Unit conversion:
 
-temperature_degC = temperature[0].metpy.convert_units('degC')
-temperature_degC
+temperature_degc = temperature[0].metpy.convert_units('degC')
+temperature_degc
 
 #########################################################################
 # Unit conversion for coordinates:
-heights_on_hPa_levels = heights.metpy.convert_coordinate_units('isobaric3', 'hPa')
-heights_on_hPa_levels['isobaric3']
+heights_on_hpa_levels = heights.metpy.convert_coordinate_units('isobaric3', 'hPa')
+heights_on_hpa_levels['isobaric3']
 
 #########################################################################
 # Accessing just the underlying unit array:
@@ -260,11 +260,14 @@ u_g
 #########################################################################
 # For profile-based calculations (and most remaining calculations in the ``metpy.calc``
 # module), xarray ``DataArray``\s are accepted as inputs, but the outputs remain Pint
-# Quantities (typically scalars)
+# Quantities (typically scalars). Note that MetPy's profile calculations (such as CAPE and
+# CIN) require the sounding to be ordered from highest to lowest pressure. As seen earlier
+# in this tutorial, this data is ordered the other way, so we need to reverse the inputs
+# to ``mpcalc.surface_based_cape_cin``.
 
 data_at_point = data.metpy.sel(
     time1='2017-09-05 12:00',
-    latitude=40 * units.degrees_north,
+    latitude=30 * units.degrees_north,
     longitude=260 * units.degrees_east
 )
 dewpoint = mpcalc.dewpoint_from_relative_humidity(
@@ -272,9 +275,9 @@ dewpoint = mpcalc.dewpoint_from_relative_humidity(
     data_at_point['Relative_humidity_isobaric']
 )
 cape, cin = mpcalc.surface_based_cape_cin(
-    data_at_point['isobaric3'],
-    data_at_point['Temperature_isobaric'],
-    dewpoint
+    data_at_point['isobaric3'][::-1],
+    data_at_point['Temperature_isobaric'][::-1],
+    dewpoint[::-1]
 )
 cape
 
@@ -434,7 +437,7 @@ data
 # **Undefined Unit Error**
 #
 # If the units attribute on your xarray data is not recognizable by Pint, you will likely
-# recieve an ``UndefinedUnitError``. In this case, you will likely have to update the units
+# receive an ``UndefinedUnitError``. In this case, you will likely have to update the units
 # attribute to one that can be parsed properly by Pint. It is our aim to have all valid
 # CF/UDUNITS unit strings be parseable, but this work is ongoing. If many variables in your
 # dataset are not parseable, the ``.update_attribute`` method on the MetPy accessor may come

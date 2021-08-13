@@ -18,16 +18,21 @@ ContourPlot
       ~ContourPlot.data
       ~ContourPlot.field
       ~ContourPlot.griddata
+      ~ContourPlot.label_fontsize
+      ~ContourPlot.latitude
       ~ContourPlot.level
       ~ContourPlot.linecolor
       ~ContourPlot.linestyle
       ~ContourPlot.linewidth
+      ~ContourPlot.longitude
       ~ContourPlot.name
       ~ContourPlot.parent
       ~ContourPlot.plot_units
       ~ContourPlot.plotdata
       ~ContourPlot.scale
       ~ContourPlot.time
+      ~ContourPlot.x
+      ~ContourPlot.y
 
    
    
@@ -48,6 +53,7 @@ ContourPlot
       ~ContourPlot.clear
       ~ContourPlot.clear_collections
       ~ContourPlot.clear_handle
+      ~ContourPlot.copy
       ~ContourPlot.draw
       ~ContourPlot.has_trait
       ~ContourPlot.hold_trait_notifications
@@ -81,16 +87,21 @@ ContourPlot
    .. autoattribute:: data
    .. autoattribute:: field
    .. autoattribute:: griddata
+   .. autoattribute:: label_fontsize
+   .. autoattribute:: latitude
    .. autoattribute:: level
    .. autoattribute:: linecolor
    .. autoattribute:: linestyle
    .. autoattribute:: linewidth
+   .. autoattribute:: longitude
    .. autoattribute:: name
    .. autoattribute:: parent
    .. autoattribute:: plot_units
    .. autoattribute:: plotdata
    .. autoattribute:: scale
    .. autoattribute:: time
+   .. autoattribute:: x
+   .. autoattribute:: y
 
    
    
@@ -110,6 +121,7 @@ ContourPlot
    .. automethod:: clear
    .. automethod:: clear_collections
    .. automethod:: clear_handle
+   .. automethod:: copy
    .. automethod:: draw
    .. automethod:: has_trait
    .. automethod:: hold_trait_notifications

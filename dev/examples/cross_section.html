@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Cross Section Analysis &#8212; MetPy 1.0dev</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet" />
@@ -27,8 +28,9 @@
 
     
 
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
@@ -37,7 +39,7 @@
     
   <link rel="preload" as="script" href="../_static/js/index.1e043a052b0af929e4d8.js">
 
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -335,7 +337,7 @@
 <p>Click <a class="reference internal" href="#sphx-glr-download-examples-cross-section-py"><span class="std std-ref">here</span></a>
 to download the full example code</p>
 </div>
-<div class="sphx-glr-example-title section" id="cross-section-analysis">
+<section class="sphx-glr-example-title" id="cross-section-analysis">
 <span id="sphx-glr-examples-cross-section-py"></span><h1>Cross Section Analysis<a class="headerlink" href="#cross-section-analysis" title="Permalink to this headline">¶</a></h1>
 <p>The MetPy function <a class="reference internal" href="../api/generated/metpy.interpolate.cross_section.html#metpy.interpolate.cross_section" title="metpy.interpolate.cross_section"><code class="xref py py-obj docutils literal notranslate"><span class="pre">metpy.interpolate.cross_section</span></code></a> can obtain a cross-sectional slice through
 gridded data.</p>
@@ -363,7 +365,7 @@ dimension.</p>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;xarray.Dataset&gt;
-Dimensions:              (isobaric: 29, x: 292, y: 118)
+Dimensions:              (isobaric: 29, y: 118, x: 292)
 Coordinates:
     time                 datetime64[ns] 1987-04-04T18:00:00
   * isobaric             (isobaric) float64 1e+03 975.0 950.0 ... 125.0 100.0
@@ -372,22 +374,21 @@ Coordinates:
     metpy_crs            object Projection: lambert_conformal_conic
 Data variables:
     Temperature          (isobaric, y, x) float32 ...
-    Lambert_Conformal    |S1 b&#39;d&#39;
+    Lambert_Conformal    |S1 ...
     lat                  (y, x) float64 ...
-    lon                  (y, x) float64 -140.0 -139.7 -139.5 ... -42.28 -42.07
+    lon                  (y, x) float64 ...
     u_wind               (isobaric, y, x) float32 ...
     v_wind               (isobaric, y, x) float32 ...
     Geopotential_height  (isobaric, y, x) float32 ...
     Specific_humidity    (isobaric, y, x) float32 ...
-Attributes:
+Attributes: (12/14)
     Conventions:              CF-1.0
     Originating_center:       US National Weather Service - NCEP(WMC) (7)
     Originating_subcenter:    The North American Regional Reanalysis (NARR) P...
     Generating_Model:         North American Regional Reanalysis (NARR)
     Product_Type:             Forecast/Uninitialized Analysis/Image Product
     title:                    US National Weather Service - NCEP(WMC) North A...
-    institution:              Center US National Weather Service - NCEP(WMC) ...
-    source:                   Forecast/Uninitialized Analysis/Image Product
+    ...                       ...
     history:                  Direct read of GRIB-1 into NetCDF-Java 4 API
     CF:feature_type:          GRID
     file_format:              GRIB-1
@@ -408,7 +409,7 @@ Attributes:
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;xarray.Dataset&gt;
-Dimensions:              (index: 100, isobaric: 29)
+Dimensions:              (isobaric: 29, index: 100)
 Coordinates:
     time                 datetime64[ns] 1987-04-04T18:00:00
   * isobaric             (isobaric) float64 1e+03 975.0 950.0 ... 125.0 100.0
@@ -420,20 +421,19 @@ Coordinates:
     lon                  (index) float64 -105.0 -104.6 -104.2 ... -65.39 -65.0
 Data variables:
     Temperature          (isobaric, index) float64 287.7 286.9 ... 211.4 211.4
-    Lambert_Conformal    |S1 b&#39;d&#39;
+    Lambert_Conformal    |S1 ...
     u_wind               (isobaric, index) float64 -2.729 0.4776 ... 24.6 23.68
     v_wind               (isobaric, index) float64 8.473 5.723 ... -1.082
     Geopotential_height  (isobaric, index) float64 118.6 127.4 ... 1.636e+04
     Specific_humidity    (isobaric, index) float64 0.006367 ... 4.223e-06
-Attributes:
+Attributes: (12/14)
     Conventions:              CF-1.0
     Originating_center:       US National Weather Service - NCEP(WMC) (7)
     Originating_subcenter:    The North American Regional Reanalysis (NARR) P...
     Generating_Model:         North American Regional Reanalysis (NARR)
     Product_Type:             Forecast/Uninitialized Analysis/Image Product
     title:                    US National Weather Service - NCEP(WMC) North A...
-    institution:              Center US National Weather Service - NCEP(WMC) ...
-    source:                   Forecast/Uninitialized Analysis/Image Product
+    ...                       ...
     history:                  Direct read of GRIB-1 into NetCDF-Java 4 API
     CF:feature_type:          GRID
     file_format:              GRIB-1
@@ -465,7 +465,7 @@ tangential/normal winds. And so, we need to calculate those, and add them to the
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;xarray.Dataset&gt;
-Dimensions:                (index: 100, isobaric: 29)
+Dimensions:                (isobaric: 29, index: 100)
 Coordinates:
     time                   datetime64[ns] 1987-04-04T18:00:00
   * isobaric               (isobaric) float64 1e+03 975.0 950.0 ... 125.0 100.0
@@ -477,7 +477,7 @@ Coordinates:
     lon                    (index) float64 -105.0 -104.6 -104.2 ... -65.39 -65.0
 Data variables:
     Temperature            (isobaric, index) float64 287.7 286.9 ... 211.4 211.4
-    Lambert_Conformal      |S1 b&#39;d&#39;
+    Lambert_Conformal      |S1 ...
     u_wind                 (isobaric, index) float64 &lt;Quantity([[ -5.30445235...
     v_wind                 (isobaric, index) float64 &lt;Quantity([[16.47047637 ...
     Geopotential_height    (isobaric, index) float64 118.6 127.4 ... 1.636e+04
@@ -486,15 +486,14 @@ Data variables:
     Relative_humidity      (isobaric, index) float64 &lt;Quantity([[0.61138304 0...
     t_wind                 (isobaric, index) float64 &lt;Quantity([[-2.02660106 ...
     n_wind                 (isobaric, index) float64 &lt;Quantity([[ 17.18448995...
-Attributes:
+Attributes: (12/14)
     Conventions:              CF-1.0
     Originating_center:       US National Weather Service - NCEP(WMC) (7)
     Originating_subcenter:    The North American Regional Reanalysis (NARR) P...
     Generating_Model:         North American Regional Reanalysis (NARR)
     Product_Type:             Forecast/Uninitialized Analysis/Image Product
     title:                    US National Weather Service - NCEP(WMC) North A...
-    institution:              Center US National Weather Service - NCEP(WMC) ...
-    source:                   Forecast/Uninitialized Analysis/Image Product
+    ...                       ...
     history:                  Direct read of GRIB-1 into NetCDF-Java 4 API
     CF:feature_type:          GRID
     file_format:              GRIB-1
@@ -510,7 +509,7 @@ Attributes:
 
 <span class="c1"># Plot RH using contourf</span>
 <a href="https://matplotlib.org/stable/api/contour_api.html#matplotlib.contour.QuadContourSet" title="matplotlib.contour.QuadContourSet" class="sphx-glr-backref-module-matplotlib-contour sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">rh_contour</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.contourf.html#matplotlib.axes.Axes.contourf" title="matplotlib.axes.Axes.contourf" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">contourf</span></a><span class="p">(</span><a href="https://xarray.pydata.org/en/stable/generated/xarray.Dataset.html#xarray.Dataset" title="xarray.Dataset" class="sphx-glr-backref-module-xarray sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cross</span></a><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">],</span> <a href="https://xarray.pydata.org/en/stable/generated/xarray.Dataset.html#xarray.Dataset" title="xarray.Dataset" class="sphx-glr-backref-module-xarray sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cross</span></a><span class="p">[</span><span class="s1">&#39;isobaric&#39;</span><span class="p">],</span> <a href="https://xarray.pydata.org/en/stable/generated/xarray.Dataset.html#xarray.Dataset" title="xarray.Dataset" class="sphx-glr-backref-module-xarray sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cross</span></a><span class="p">[</span><span class="s1">&#39;Relative_humidity&#39;</span><span class="p">],</span>
-                         <span class="n">levels</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html#numpy.arange" title="numpy.arange" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">,</span> <span class="o">.</span><span class="mi">05</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;YlGnBu&#39;</span><span class="p">)</span>
+                         <span class="n">levels</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html#numpy.arange" title="numpy.arange" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">,</span> <span class="mf">.05</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;YlGnBu&#39;</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/colorbar_api.html#matplotlib.colorbar.Colorbar" title="matplotlib.colorbar.Colorbar" class="sphx-glr-backref-module-matplotlib-colorbar sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">rh_colorbar</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.colorbar" title="matplotlib.figure.Figure.colorbar" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span></a><span class="p">(</span><a href="https://matplotlib.org/stable/api/contour_api.html#matplotlib.contour.QuadContourSet" title="matplotlib.contour.QuadContourSet" class="sphx-glr-backref-module-matplotlib-contour sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">rh_contour</span></a><span class="p">)</span>
 
 <span class="c1"># Plot potential temperature using contour, with some custom labeling</span>
@@ -553,11 +552,10 @@ Attributes:
 
 <span class="c1"># Set the titles and axes labels</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_title.html#matplotlib.axes.Axes.set_title" title="matplotlib.axes.Axes.set_title" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax_inset</span><span class="o">.</span><span class="n">set_title</span></a><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_title.html#matplotlib.axes.Axes.set_title" title="matplotlib.axes.Axes.set_title" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">set_title</span></a><span class="p">(</span><span class="s1">&#39;NARR Cross-Section </span><span class="se">\u2013</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> to </span><span class="si">{}</span><span class="s1"> </span><span class="se">\u2013</span><span class="s1"> Valid: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span>
-             <span class="s1">&#39;Potential Temperature (K), Tangential/Normal Winds (knots), &#39;</span>
-             <span class="s1">&#39;Relative Humidity (dimensionless)</span><span class="se">\n</span><span class="s1">&#39;</span>
-             <span class="s1">&#39;Inset: Cross-Section Path and 500 hPa Geopotential Height&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                 <a href="https://docs.python.org/3/library/stdtypes.html#tuple" title="builtins.tuple" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">start</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#tuple" title="builtins.tuple" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">end</span></a><span class="p">,</span> <a href="https://xarray.pydata.org/en/stable/generated/xarray.Dataset.html#xarray.Dataset" title="xarray.Dataset" class="sphx-glr-backref-module-xarray sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cross</span></a><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%MZ&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()))</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_title.html#matplotlib.axes.Axes.set_title" title="matplotlib.axes.Axes.set_title" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">set_title</span></a><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;NARR Cross-Section </span><span class="se">\u2013</span><span class="s1"> </span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#tuple" title="builtins.tuple" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">start</span></a><span class="si">}</span><span class="s1"> to </span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#tuple" title="builtins.tuple" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">end</span></a><span class="si">}</span><span class="s1"> </span><span class="se">\u2013</span><span class="s1"> &#39;</span>
+             <span class="sa">f</span><span class="s1">&#39;Valid: </span><span class="si">{</span><a href="https://xarray.pydata.org/en/stable/generated/xarray.Dataset.html#xarray.Dataset" title="xarray.Dataset" class="sphx-glr-backref-module-xarray sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cross</span></a><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%MZ&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span>
+             <span class="s1">&#39;Potential Temperature (K), Tangential/Normal Winds (knots), Relative Humidity &#39;</span>
+             <span class="s1">&#39;(dimensionless)</span><span class="se">\n</span><span class="s1">Inset: Cross-Section Path and 500 hPa Geopotential Height&#39;</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_ylabel.html#matplotlib.axes.Axes.set_ylabel" title="matplotlib.axes.Axes.set_ylabel" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span></a><span class="p">(</span><span class="s1">&#39;Pressure (hPa)&#39;</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xlabel.html#matplotlib.axes.Axes.set_xlabel" title="matplotlib.axes.Axes.set_xlabel" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span></a><span class="p">(</span><span class="s1">&#39;Longitude (degrees east)&#39;</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/colorbar_api.html#matplotlib.colorbar.ColorbarBase.set_label" title="matplotlib.colorbar.ColorbarBase.set_label" class="sphx-glr-backref-module-matplotlib-colorbar sphx-glr-backref-type-py-method"><span class="n">rh_colorbar</span><span class="o">.</span><span class="n">set_label</span></a><span class="p">(</span><span class="s1">&#39;Relative Humidity (dimensionless)&#39;</span><span class="p">)</span>
@@ -574,7 +572,7 @@ Attributes:
 <p>Note: The x-axis can display any variable that is the same length as the
 plotted variables, including latitude. Additionally, arguments can be provided
 to <code class="docutils literal notranslate"><span class="pre">ax.set_xticklabels</span></code> to label lat/lon pairs, similar to the default NCL output.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  2.397 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  5.955 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-cross-section-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/2b7cc27b99027ed24f4bcc2332422c1a/cross_section.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">cross_section.py</span></code></a></p>
@@ -584,7 +582,7 @@ to <code class="docutils literal notranslate"><span class="pre">ax.set_xticklabe
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
-</div>
+</section>
 
 
               </div>
@@ -620,9 +618,9 @@ to <code class="docutils literal notranslate"><span class="pre">ax.set_xticklabe
     <footer class="footer mt-5 mt-md-0">
   <div class="container">
     <p>
-          &copy; Copyright 2008–2021, MetPy Developers. Development supported by National Science Foundation grants AGS-1344155, OAC-1740315, and AGS-1901712.<br/>
-        Last updated on Apr 12, 2021 at 17:36:36.<br/>
-        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+          &copy; Copyright 2008–2021, MetPy Developers.Development is supported by Unidata and the National Science Foundation..<br/>
+        Last updated on Aug 13, 2021 at 16:38:07.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
     </p>
   </div>
 </footer>

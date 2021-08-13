@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>GEMPAK Comparison Guide &#8212; MetPy 1.0dev</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet" />
@@ -27,8 +28,9 @@
 
     
 
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
@@ -37,7 +39,7 @@
     
   <link rel="preload" as="script" href="../_static/js/index.1e043a052b0af929e4d8.js">
 
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -215,7 +217,7 @@
               
               <div>
                 
-  <div class="section" id="gempak-comparison-guide">
+  <section id="gempak-comparison-guide">
 <h1>GEMPAK Comparison Guide<a class="headerlink" href="#gempak-comparison-guide" title="Permalink to this headline">¶</a></h1>
 <p>The popular meteorological plotting and analysis tool GEMPAK is no longer formally supported
 and Unidata is only producing occasional maintenance releases. To help GEMPAK users convert to
@@ -1699,7 +1701,7 @@ blue is uncertain of parity, and white is unevaluated.</p>
   </tr>
   <tr>
     <td>ENS_SWSPRD(input_arg1 & input_arg2)</td>
-    <td>Compute the spred, similar to ENS_SSPRD, of a scalar diagnostic field over an ensemble. The spread is weighted and input_arg2 specifies the name of a weight grid to be used in the calculation.                 NOTE: For uniform weights ens_ssprd (input_arg1) might be expected to give the same result as ens_swsprd(input_arg1 &amp; w1) where  w1 is uniform field of 1.  This does not happen because of the division by (N-1) in ens_ssprd.  The same is also true in comparing ens_vsprd and ens_vwsprd results.</td>
+    <td>Compute the spread, similar to ENS_SSPRD, of a scalar diagnostic field over an ensemble. The spread is weighted and input_arg2 specifies the name of a weight grid to be used in the calculation.                 NOTE: For uniform weights ens_ssprd (input_arg1) might be expected to give the same result as ens_swsprd(input_arg1 &amp; w1) where  w1 is uniform field of 1.  This does not happen because of the division by (N-1) in ens_ssprd.  The same is also true in comparing ens_vsprd and ens_vwsprd results.</td>
     <td></td>
     <td></td>
     <td></td>
@@ -1723,7 +1725,7 @@ blue is uncertain of parity, and white is unevaluated.</p>
   </tr>
   <tr>
     <td>ENS_VWSPRD(input_arg1 & input_arg2)</td>
-    <td>Compute the spred, similar to ENS_VSPRD, of a vector diagnostic field over an ensemble. The spread is weighted and input_arg2 specifies the name of a weight grid to be used in the calculation.  Also, see NOTE for function ENS_SWSPRD.</td>
+    <td>Compute the spread, similar to ENS_VSPRD, of a vector diagnostic field over an ensemble. The spread is weighted and input_arg2 specifies the name of a weight grid to be used in the calculation.  Also, see NOTE for function ENS_SWSPRD.</td>
     <td></td>
     <td></td>
     <td></td>
@@ -2137,7 +2139,7 @@ blue is uncertain of parity, and white is unevaluated.</p>
   </tr>
   <tr>
     <td>dctrop</td>
-    <td>Hurricane/tropical storm reprots</td>
+    <td>Hurricane/tropical storm reports</td>
     <td></td>
     <td></td>
     <td></td>
@@ -4815,7 +4817,7 @@ blue is uncertain of parity, and white is unevaluated.</p>
   </tr>
   <tr>
     <td>SK12</td>
-    <td>maximum sustain surface wind spped fcst for 12-hr period</td>
+    <td>maximum sustain surface wind speed fcst for 12-hr period</td>
     <td></td>
     <td></td>
     <td></td>
@@ -7591,7 +7593,7 @@ blue is uncertain of parity, and white is unevaluated.</p>
   </tr>
   <tr>
     <td>RADFRQ</td>
-    <td>tThe update frequency for RADAR composites.</td>
+    <td>The update frequency for RADAR composites.</td>
     <td></td>
     <td></td>
     <td></td>
@@ -8309,7 +8311,7 @@ blue is uncertain of parity, and white is unevaluated.</p>
     <td></td>
     <td></td>
   </tr>
-</table></div>
+</table></section>
 
 
               </div>
@@ -8345,9 +8347,9 @@ blue is uncertain of parity, and white is unevaluated.</p>
     <footer class="footer mt-5 mt-md-0">
   <div class="container">
     <p>
-          &copy; Copyright 2008–2021, MetPy Developers. Development supported by National Science Foundation grants AGS-1344155, OAC-1740315, and AGS-1901712.<br/>
-        Last updated on Apr 12, 2021 at 17:36:36.<br/>
-        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+          &copy; Copyright 2008–2021, MetPy Developers.Development is supported by Unidata and the National Science Foundation..<br/>
+        Last updated on Aug 13, 2021 at 16:38:07.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
     </p>
   </div>
 </footer>

@@ -27,8 +27,9 @@
 
     
 
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery-dataframe.css" />
@@ -37,7 +38,7 @@
     
   <link rel="preload" as="script" href="../../../_static/js/index.1e043a052b0af929e4d8.js">
 
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
@@ -189,7 +190,7 @@
 <span class="n">exporter</span> <span class="o">=</span> <span class="n">Exporter</span><span class="p">(</span><span class="nb">globals</span><span class="p">())</span>
 
 
-<div class="viewcode-block" id="StationPlot"><a class="viewcode-back" href="../../../api/generated/metpy.plots.StationPlot.html#metpy.plots.StationPlot">[docs]</a><span class="nd">@exporter</span><span class="o">.</span><span class="n">export</span>
+<span class="nd">@exporter</span><span class="o">.</span><span class="n">export</span>
 <span class="k">class</span> <span class="nc">StationPlot</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Make a standard meteorological station plot.</span>
 
@@ -283,7 +284,7 @@
 <span class="sd">           from metpy.plots.wx_symbols import sky_cover, pressure_tendency</span>
 
 
-<span class="sd">           def plot_symbols(mapper, name, nwrap=12, figsize=(10, 1.4)):</span>
+<span class="sd">           def plot_symbols(mapper, name, nwrap=10, figsize=(10, 1.4)):</span>
 
 <span class="sd">               # Determine how many symbols there are and layout in rows of nwrap</span>
 <span class="sd">               # if there are more than nwrap symbols</span>
@@ -324,7 +325,7 @@
 <span class="sd">           plot_symbols(low_clouds, &quot;Low Cloud Symbols&quot;)</span>
 <span class="sd">           plot_symbols(mid_clouds, &quot;Mid Cloud Symbols&quot;)</span>
 <span class="sd">           plot_symbols(high_clouds, &quot;High Cloud Symbols&quot;)</span>
-<span class="sd">           plot_symbols(sky_cover, &quot;Sky Cover Symbols&quot;)</span>
+<span class="sd">           plot_symbols(sky_cover, &quot;Sky Cover Symbols&quot;, nwrap=12)</span>
 <span class="sd">           plot_symbols(pressure_tendency, &quot;Pressure Tendency Symbols&quot;)</span>
 
 <span class="sd">        See Also</span>
@@ -451,7 +452,7 @@
         <span class="c1"># Empirically determined</span>
         <span class="n">pivot</span> <span class="o">=</span> <span class="mf">0.51</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fontsize</span><span class="p">)</span>
         <span class="n">length</span> <span class="o">=</span> <span class="mf">1.95</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fontsize</span><span class="p">)</span>
-        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;sizes&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;spacing&#39;</span><span class="p">:</span> <span class="o">.</span><span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;emptybarb&#39;</span><span class="p">:</span> <span class="mf">0.35</span><span class="p">},</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;sizes&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;spacing&#39;</span><span class="p">:</span> <span class="mf">.15</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;emptybarb&#39;</span><span class="p">:</span> <span class="mf">0.35</span><span class="p">},</span>
                     <span class="s1">&#39;length&#39;</span><span class="p">:</span> <span class="n">length</span><span class="p">,</span> <span class="s1">&#39;pivot&#39;</span><span class="p">:</span> <span class="n">pivot</span><span class="p">}</span>
         <span class="n">defaults</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -559,10 +560,10 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">location_names</span><span class="p">[</span><span class="n">location</span><span class="p">]</span>
         <span class="n">xoff</span><span class="p">,</span> <span class="n">yoff</span> <span class="o">=</span> <span class="n">location</span>
-        <span class="k">return</span> <span class="n">xoff</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">spacing</span><span class="p">,</span> <span class="n">yoff</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">spacing</span></div>
+        <span class="k">return</span> <span class="n">xoff</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">spacing</span><span class="p">,</span> <span class="n">yoff</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">spacing</span>
 
 
-<div class="viewcode-block" id="StationPlotLayout"><a class="viewcode-back" href="../../../api/generated/metpy.plots.StationPlotLayout.html#metpy.plots.StationPlotLayout">[docs]</a><span class="nd">@exporter</span><span class="o">.</span><span class="n">export</span>
+<span class="nd">@exporter</span><span class="o">.</span><span class="n">export</span>
 <span class="k">class</span> <span class="nc">StationPlotLayout</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;make a layout to encapsulate plotting using :class:`StationPlot`.</span>
 
@@ -794,7 +795,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;{&#39;</span>
                 <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">: (</span><span class="si">{1[0].name}</span><span class="s1">, </span><span class="si">{1[1]}</span><span class="s1">, ...)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
                             <span class="k">for</span> <span class="n">loc</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
-                <span class="o">+</span> <span class="s1">&#39;}&#39;</span><span class="p">)</span></div>
+                <span class="o">+</span> <span class="s1">&#39;}&#39;</span><span class="p">)</span>
 
 
 <span class="k">with</span> <span class="n">exporter</span><span class="p">:</span>
@@ -806,7 +807,7 @@
     <span class="n">simple_layout</span><span class="o">.</span><span class="n">add_value</span><span class="p">(</span><span class="s1">&#39;NE&#39;</span><span class="p">,</span> <span class="s1">&#39;air_pressure_at_sea_level&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;mbar&#39;</span><span class="p">,</span>
                             <span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">format</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">v</span><span class="p">,</span> <span class="s1">&#39;03.0f&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">3</span><span class="p">:])</span>
     <span class="n">simple_layout</span><span class="o">.</span><span class="n">add_symbol</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;cloud_coverage&#39;</span><span class="p">,</span> <span class="n">sky_cover</span><span class="p">)</span>
-    <span class="n">simple_layout</span><span class="o">.</span><span class="n">add_symbol</span><span class="p">(</span><span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;present_weather&#39;</span><span class="p">,</span> <span class="n">current_weather</span><span class="p">)</span>
+    <span class="n">simple_layout</span><span class="o">.</span><span class="n">add_symbol</span><span class="p">(</span><span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;current_wx1_symbol&#39;</span><span class="p">,</span> <span class="n">current_weather</span><span class="p">)</span>
 
     <span class="c1">#: Full NWS station plot `layout`__</span>
     <span class="c1">#:</span>
@@ -819,7 +820,7 @@
     <span class="n">nws_layout</span><span class="o">.</span><span class="n">add_value</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;air_pressure_at_sea_level&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;mbar&#39;</span><span class="p">,</span>
                          <span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">format</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">v</span><span class="p">,</span> <span class="s1">&#39;03.0f&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">3</span><span class="p">:])</span>
     <span class="n">nws_layout</span><span class="o">.</span><span class="n">add_value</span><span class="p">((</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;visibility_in_air&#39;</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;.0f&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;miles&#39;</span><span class="p">)</span>
-    <span class="n">nws_layout</span><span class="o">.</span><span class="n">add_symbol</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;present_weather&#39;</span><span class="p">,</span> <span class="n">current_weather</span><span class="p">)</span>
+    <span class="n">nws_layout</span><span class="o">.</span><span class="n">add_symbol</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;current_wx1_symbol&#39;</span><span class="p">,</span> <span class="n">current_weather</span><span class="p">)</span>
     <span class="n">nws_layout</span><span class="o">.</span><span class="n">add_symbol</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;cloud_coverage&#39;</span><span class="p">,</span> <span class="n">sky_cover</span><span class="p">)</span>
     <span class="n">nws_layout</span><span class="o">.</span><span class="n">add_value</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;tendency_of_air_pressure&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;mbar&#39;</span><span class="p">,</span>
                          <span class="n">fmt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="nb">format</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="s1">&#39;02.0f&#39;</span><span class="p">))</span>
@@ -828,7 +829,7 @@
     <span class="n">nws_layout</span><span class="o">.</span><span class="n">add_value</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;dew_point_temperature&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;degF&#39;</span><span class="p">)</span>
 
     <span class="c1"># TODO: Fix once we have the past weather symbols converted</span>
-    <span class="n">nws_layout</span><span class="o">.</span><span class="n">add_symbol</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;past_weather&#39;</span><span class="p">,</span> <span class="n">current_weather</span><span class="p">)</span>
+    <span class="n">nws_layout</span><span class="o">.</span><span class="n">add_symbol</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;current_wx2_symbol&#39;</span><span class="p">,</span> <span class="n">current_weather</span><span class="p">)</span>
 </pre></div>
 
               </div>
@@ -862,9 +863,9 @@
     <footer class="footer mt-5 mt-md-0">
   <div class="container">
     <p>
-          &copy; Copyright 2008–2021, MetPy Developers. Development supported by National Science Foundation grants AGS-1344155, OAC-1740315, and AGS-1901712.<br/>
-        Last updated on Apr 12, 2021 at 17:36:36.<br/>
-        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+          &copy; Copyright 2008–2021, MetPy Developers.Development is supported by Unidata and the National Science Foundation..<br/>
+        Last updated on Aug 13, 2021 at 16:38:07.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
     </p>
   </div>
 </footer>

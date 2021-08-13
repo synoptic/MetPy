@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>interpolate_to_grid &#8212; MetPy 1.0dev</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet" />
@@ -27,8 +28,9 @@
 
     
 
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
@@ -37,7 +39,7 @@
     
   <link rel="preload" as="script" href="../../_static/js/index.1e043a052b0af929e4d8.js">
 
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -169,7 +171,7 @@
  </li>
  <li class="toctree-l2">
   <a class="reference internal" href="metpy.plots.html">
-   plots
+   metpy.plots
   </a>
  </li>
  <li class="toctree-l2">
@@ -262,6 +264,11 @@
      remove_repeat_coordinates
     </a>
    </li>
+   <li class="toctree-l3">
+    <a class="reference internal" href="metpy.interpolate.set_module.html">
+     set_module
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l2">
@@ -317,11 +324,11 @@
               
               <div>
                 
-  <div class="section" id="interpolate-to-grid">
+  <section id="interpolate-to-grid">
 <h1>interpolate_to_grid<a class="headerlink" href="#interpolate-to-grid" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="metpy.interpolate.interpolate_to_grid">
-<code class="sig-prename descclassname"><span class="pre">metpy.interpolate.</span></code><code class="sig-name descname"><span class="pre">interpolate_to_grid</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interp_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimum_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa_star</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.052</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rbf_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rbf_smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary_coords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/metpy/interpolate/grid.html#interpolate_to_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metpy.interpolate.interpolate_to_grid" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="metpy.interpolate.interpolate_to_grid">
+<span class="sig-prename descclassname"><span class="pre">metpy.interpolate.</span></span><span class="sig-name descname"><span class="pre">interpolate_to_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interp_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimum_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa_star</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.052</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rbf_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rbf_smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary_coords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metpy.interpolate.interpolate_to_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Interpolate given (x,y), observation (z) pairs to a grid based on given parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -330,7 +337,7 @@
 <li><p><strong>y</strong> (<em>array_like</em>) – y coordinate, can have units of linear distance or degrees</p></li>
 <li><p><strong>z</strong> (<em>array_like</em>) – observation value</p></li>
 <li><p><strong>interp_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – What type of interpolation to use. Available options include:
-1) “linear”, “nearest”, “cubic”, or “rbf” from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/interpolate.html#module-scipy.interpolate" title="(in SciPy v1.6.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.interpolate</span></code></a>.
+1) “linear”, “nearest”, “cubic”, or “rbf” from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/reference/interpolate.html#module-scipy.interpolate" title="(in SciPy v1.7.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.interpolate</span></code></a>.
 2) “natural_neighbor”, “barnes”, or “cressman” from <a class="reference internal" href="metpy.interpolate.html#module-metpy.interpolate" title="metpy.interpolate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">metpy.interpolate</span></code></a>.
 Default “linear”.</p></li>
 <li><p><strong>hres</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The horizontal resolution of the generated grid, given in the same units as the
@@ -345,7 +352,7 @@ If search_radius is not specified, it will default to the average spacing of
 observations.</p></li>
 <li><p><strong>rbf_func</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Specifies which function to use for Rbf interpolation.
 Options include: ‘multiquadric’, ‘inverse’, ‘gaussian’, ‘linear’, ‘cubic’,
-‘quintic’, and ‘thin_plate’. Defualt ‘linear’. See <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Rbf.html#scipy.interpolate.Rbf" title="(in SciPy v1.6.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.interpolate.Rbf</span></code></a> for more
+‘quintic’, and ‘thin_plate’. Default ‘linear’. See <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/reference/generated/scipy.interpolate.Rbf.html#scipy.interpolate.Rbf" title="(in SciPy v1.7.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.interpolate.Rbf</span></code></a> for more
 information.</p></li>
 <li><p><strong>rbf_smooth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Smoothing value applied to rbf interpolation.  Higher values result in more smoothing.</p></li>
 <li><p><strong>boundary_coords</strong> (<em>dictionary</em>) – Optional dictionary containing coordinates of the study area boundary. Dictionary
@@ -372,18 +379,22 @@ are provided.</p>
 </div>
 </dd></dl>
 
-<div class="section" id="examples-using-metpy-interpolate-interpolate-to-grid">
+<section id="examples-using-metpy-interpolate-interpolate-to-grid">
 <h2>Examples using <code class="docutils literal notranslate"><span class="pre">metpy.interpolate.interpolate_to_grid</span></code><a class="headerlink" href="#examples-using-metpy-interpolate-interpolate-to-grid" title="Permalink to this headline">¶</a></h2>
-<div class="sphx-glr-thumbcontainer" tooltip="Interpolate sea level pressure, as well as wind component data, to make a consistent looking an..."><div class="figure align-default" id="id1">
+<div class="sphx-glr-thumbcontainer" tooltip="Interpolate sea level pressure, as well as wind component data, to make a consistent looking an..."><figure class="align-default" id="id1">
 <img alt="Wind and Sea Level Pressure Interpolation" src="../../_images/sphx_glr_Wind_SLP_Interpolation_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../../examples/gridding/Wind_SLP_Interpolation.html#sphx-glr-examples-gridding-wind-slp-interpolation-py"><span class="std std-ref">Wind and Sea Level Pressure Interpolation</span></a></span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
-</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Compares different point interpolation approaches."><div class="figure align-default" id="id2">
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="../../examples/gridding/Wind_SLP_Interpolation.html#sphx-glr-examples-gridding-wind-slp-interpolation-py"><span class="std std-ref">Wind and Sea Level Pressure Interpolation</span></a></span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Compares different point interpolation approaches."><figure class="align-default" id="id2">
 <img alt="Point Interpolation" src="../../_images/sphx_glr_Point_Interpolation_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../../examples/gridding/Point_Interpolation.html#sphx-glr-examples-gridding-point-interpolation-py"><span class="std std-ref">Point Interpolation</span></a></span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
-</div>
-</div><div style='clear:both'></div></div>
-</div>
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="../../examples/gridding/Point_Interpolation.html#sphx-glr-examples-gridding-point-interpolation-py"><span class="std std-ref">Point Interpolation</span></a></span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div style='clear:both'></div></section>
+</section>
 
 
               </div>
@@ -419,9 +430,9 @@ are provided.</p>
     <footer class="footer mt-5 mt-md-0">
   <div class="container">
     <p>
-          &copy; Copyright 2008–2021, MetPy Developers. Development supported by National Science Foundation grants AGS-1344155, OAC-1740315, and AGS-1901712.<br/>
-        Last updated on Apr 12, 2021 at 17:36:36.<br/>
-        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+          &copy; Copyright 2008–2021, MetPy Developers.Development is supported by Unidata and the National Science Foundation..<br/>
+        Last updated on Aug 13, 2021 at 16:38:07.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
     </p>
   </div>
 </footer>

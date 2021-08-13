@@ -19,7 +19,9 @@ BarbPlot
       ~BarbPlot.earth_relative
       ~BarbPlot.field
       ~BarbPlot.griddata
+      ~BarbPlot.latitude
       ~BarbPlot.level
+      ~BarbPlot.longitude
       ~BarbPlot.name
       ~BarbPlot.parent
       ~BarbPlot.pivot
@@ -28,6 +30,8 @@ BarbPlot
       ~BarbPlot.scale
       ~BarbPlot.skip
       ~BarbPlot.time
+      ~BarbPlot.x
+      ~BarbPlot.y
 
    
    
@@ -48,6 +52,7 @@ BarbPlot
       ~BarbPlot.clear
       ~BarbPlot.clear_collections
       ~BarbPlot.clear_handle
+      ~BarbPlot.copy
       ~BarbPlot.draw
       ~BarbPlot.has_trait
       ~BarbPlot.hold_trait_notifications
@@ -82,7 +87,9 @@ BarbPlot
    .. autoattribute:: earth_relative
    .. autoattribute:: field
    .. autoattribute:: griddata
+   .. autoattribute:: latitude
    .. autoattribute:: level
+   .. autoattribute:: longitude
    .. autoattribute:: name
    .. autoattribute:: parent
    .. autoattribute:: pivot
@@ -91,6 +98,8 @@ BarbPlot
    .. autoattribute:: scale
    .. autoattribute:: skip
    .. autoattribute:: time
+   .. autoattribute:: x
+   .. autoattribute:: y
 
    
    
@@ -110,6 +119,7 @@ BarbPlot
    .. automethod:: clear
    .. automethod:: clear_collections
    .. automethod:: clear_handle
+   .. automethod:: copy
    .. automethod:: draw
    .. automethod:: has_trait
    .. automethod:: hold_trait_notifications

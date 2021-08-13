@@ -16,13 +16,17 @@ PlotScalar
       ~PlotScalar.data
       ~PlotScalar.field
       ~PlotScalar.griddata
+      ~PlotScalar.latitude
       ~PlotScalar.level
+      ~PlotScalar.longitude
       ~PlotScalar.name
       ~PlotScalar.parent
       ~PlotScalar.plot_units
       ~PlotScalar.plotdata
       ~PlotScalar.scale
       ~PlotScalar.time
+      ~PlotScalar.x
+      ~PlotScalar.y
 
    
    
@@ -43,6 +47,7 @@ PlotScalar
       ~PlotScalar.clear
       ~PlotScalar.clear_collections
       ~PlotScalar.clear_handle
+      ~PlotScalar.copy
       ~PlotScalar.draw
       ~PlotScalar.has_trait
       ~PlotScalar.hold_trait_notifications
@@ -74,13 +79,17 @@ PlotScalar
    .. autoattribute:: data
    .. autoattribute:: field
    .. autoattribute:: griddata
+   .. autoattribute:: latitude
    .. autoattribute:: level
+   .. autoattribute:: longitude
    .. autoattribute:: name
    .. autoattribute:: parent
    .. autoattribute:: plot_units
    .. autoattribute:: plotdata
    .. autoattribute:: scale
    .. autoattribute:: time
+   .. autoattribute:: x
+   .. autoattribute:: y
 
    
    
@@ -100,6 +109,7 @@ PlotScalar
    .. automethod:: clear
    .. automethod:: clear_collections
    .. automethod:: clear_handle
+   .. automethod:: copy
    .. automethod:: draw
    .. automethod:: has_trait
    .. automethod:: hold_trait_notifications

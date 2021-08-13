@@ -18,7 +18,9 @@ PlotVector
       ~PlotVector.earth_relative
       ~PlotVector.field
       ~PlotVector.griddata
+      ~PlotVector.latitude
       ~PlotVector.level
+      ~PlotVector.longitude
       ~PlotVector.name
       ~PlotVector.parent
       ~PlotVector.pivot
@@ -27,6 +29,8 @@ PlotVector
       ~PlotVector.scale
       ~PlotVector.skip
       ~PlotVector.time
+      ~PlotVector.x
+      ~PlotVector.y
 
    
    
@@ -47,6 +51,7 @@ PlotVector
       ~PlotVector.clear
       ~PlotVector.clear_collections
       ~PlotVector.clear_handle
+      ~PlotVector.copy
       ~PlotVector.draw
       ~PlotVector.has_trait
       ~PlotVector.hold_trait_notifications
@@ -80,7 +85,9 @@ PlotVector
    .. autoattribute:: earth_relative
    .. autoattribute:: field
    .. autoattribute:: griddata
+   .. autoattribute:: latitude
    .. autoattribute:: level
+   .. autoattribute:: longitude
    .. autoattribute:: name
    .. autoattribute:: parent
    .. autoattribute:: pivot
@@ -89,6 +96,8 @@ PlotVector
    .. autoattribute:: scale
    .. autoattribute:: skip
    .. autoattribute:: time
+   .. autoattribute:: x
+   .. autoattribute:: y
 
    
    
@@ -108,6 +117,7 @@ PlotVector
    .. automethod:: clear
    .. automethod:: clear_collections
    .. automethod:: clear_handle
+   .. automethod:: copy
    .. automethod:: draw
    .. automethod:: has_trait
    .. automethod:: hold_trait_notifications

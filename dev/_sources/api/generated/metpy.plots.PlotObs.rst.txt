@@ -16,6 +16,7 @@ PlotObs
       ~PlotObs.cross_validation_lock
       ~PlotObs.data
       ~PlotObs.fields
+      ~PlotObs.fontsize
       ~PlotObs.formats
       ~PlotObs.level
       ~PlotObs.locations
@@ -49,6 +50,7 @@ PlotObs
       ~PlotObs.class_trait_names
       ~PlotObs.class_traits
       ~PlotObs.clear
+      ~PlotObs.copy
       ~PlotObs.draw
       ~PlotObs.has_trait
       ~PlotObs.hold_trait_notifications
@@ -80,6 +82,7 @@ PlotObs
    .. autoattribute:: cross_validation_lock
    .. autoattribute:: data
    .. autoattribute:: fields
+   .. autoattribute:: fontsize
    .. autoattribute:: formats
    .. autoattribute:: level
    .. autoattribute:: locations
@@ -112,6 +115,7 @@ PlotObs
    .. automethod:: class_trait_names
    .. automethod:: class_traits
    .. automethod:: clear
+   .. automethod:: copy
    .. automethod:: draw
    .. automethod:: has_trait
    .. automethod:: hold_trait_notifications

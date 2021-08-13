@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>masked_array &#8212; MetPy 1.0dev</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet" />
@@ -27,8 +28,9 @@
 
     
 
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
@@ -37,7 +39,7 @@
     
   <link rel="preload" as="script" href="../../_static/js/index.1e043a052b0af929e4d8.js">
 
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -211,7 +213,7 @@
  </li>
  <li class="toctree-l2">
   <a class="reference internal" href="metpy.plots.html">
-   plots
+   metpy.plots
   </a>
  </li>
  <li class="toctree-l2">
@@ -262,12 +264,12 @@
               
               <div>
                 
-  <div class="section" id="masked-array">
+  <section id="masked-array">
 <h1>masked_array<a class="headerlink" href="#masked-array" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="metpy.units.masked_array">
-<code class="sig-prename descclassname"><span class="pre">metpy.units.</span></code><code class="sig-name descname"><span class="pre">masked_array</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/metpy/units.html#masked_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metpy.units.masked_array" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a <a class="reference external" href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ma.MaskedArray</span></code></a> with units attached.</p>
+<dt class="sig sig-object py" id="metpy.units.masked_array">
+<span class="sig-prename descclassname"><span class="pre">metpy.units.</span></span><span class="sig-name descname"><span class="pre">masked_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/metpy/units.html#masked_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metpy.units.masked_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <a class="reference external" href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ma.MaskedArray</span></code></a> with units attached.</p>
 <p>This is a thin wrapper around <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.ma.masked_array()</span></code> that ensures that
 units are properly attached to the result (otherwise units are silently lost). Units
 are taken from the <code class="docutils literal notranslate"><span class="pre">data_units</span></code> argument, or if this is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the units on <code class="docutils literal notranslate"><span class="pre">data</span></code>
@@ -278,7 +280,7 @@ are used.</p>
 <li><p><strong>data</strong> (<em>array_like</em>) – The source data. If <code class="docutils literal notranslate"><span class="pre">data_units</span></code> is <em class="xref py py-obj">None</em>, this should be a <a class="reference external" href="https://pint.readthedocs.io/en/stable/developers_reference.html#pint.Quantity" title="(in pint v0.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pint.Quantity</span></code></a> with
 the desired units.</p></li>
 <li><p><strong>data_units</strong> (str or <a class="reference external" href="https://pint.readthedocs.io/en/stable/developers_reference.html#pint.Unit" title="(in pint v0.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pint.Unit</span></code></a>, optional) – The units for the resulting <a class="reference external" href="https://pint.readthedocs.io/en/stable/developers_reference.html#pint.Quantity" title="(in pint v0.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pint.Quantity</span></code></a></p></li>
-<li><p><strong>kwargs</strong> – Arbitrary keyword arguments passed to <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ma.masked_array.html#numpy.ma.masked_array" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ma.masked_array</span></code></a>, optional</p></li>
+<li><p><strong>kwargs</strong> – Arbitrary keyword arguments passed to <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ma.masked_array.html#numpy.ma.masked_array" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ma.masked_array</span></code></a>, optional</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -287,7 +289,7 @@ the desired units.</p></li>
 </dl>
 </dd></dl>
 
-<div style='clear:both'></div></div>
+<div style='clear:both'></div></section>
 
 
               </div>
@@ -323,9 +325,9 @@ the desired units.</p></li>
     <footer class="footer mt-5 mt-md-0">
   <div class="container">
     <p>
-          &copy; Copyright 2008–2021, MetPy Developers. Development supported by National Science Foundation grants AGS-1344155, OAC-1740315, and AGS-1901712.<br/>
-        Last updated on Apr 12, 2021 at 17:36:36.<br/>
-        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+          &copy; Copyright 2008–2021, MetPy Developers.Development is supported by Unidata and the National Science Foundation..<br/>
+        Last updated on Aug 13, 2021 at 16:38:07.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
     </p>
   </div>
 </footer>

@@ -1,6 +1,6 @@
 ﻿
 
-plots
+metpy.plots
 ===========
 
 .. automodule:: metpy.plots
@@ -37,6 +37,7 @@ plots
       ImagePlot
       MapPanel
       PanelContainer
+      PlotGeometry
       PlotObs
       PlotScalar
       PlotVector

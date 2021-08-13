@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Station Plot with Layout &#8212; MetPy 1.0dev</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet" />
@@ -27,8 +28,9 @@
 
     
 
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
@@ -37,7 +39,7 @@
     
   <link rel="preload" as="script" href="../../_static/js/index.1e043a052b0af929e4d8.js">
 
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -349,7 +351,7 @@
 <p>Click <a class="reference internal" href="#sphx-glr-download-examples-plots-station-plot-with-layout-py"><span class="std std-ref">here</span></a>
 to download the full example code</p>
 </div>
-<div class="sphx-glr-example-title section" id="station-plot-with-layout">
+<section class="sphx-glr-example-title" id="station-plot-with-layout">
 <span id="sphx-glr-examples-plots-station-plot-with-layout-py"></span><h1>Station Plot with Layout<a class="headerlink" href="#station-plot-with-layout" title="Permalink to this headline">¶</a></h1>
 <p>Make a station plot, complete with sky cover and weather symbols, using a
 station plot layout built into MetPy.</p>
@@ -367,15 +369,15 @@ of a station plot.</p>
 
 <span class="kn">from</span> <span class="nn">metpy.calc</span> <span class="kn">import</span> <a href="../../api/generated/metpy.calc.wind_components.html#metpy.calc.wind_components" title="metpy.calc.wind_components" class="sphx-glr-backref-module-metpy-calc sphx-glr-backref-type-py-function"><span class="n">wind_components</span></a>
 <span class="kn">from</span> <span class="nn">metpy.cbook</span> <span class="kn">import</span> <span class="n">get_test_data</span>
-<span class="kn">from</span> <span class="nn">metpy.plots</span> <span class="kn">import</span> <span class="p">(</span><a href="../../api/generated/metpy.plots.add_metpy_logo.html#metpy.plots.add_metpy_logo" title="metpy.plots.add_metpy_logo" class="sphx-glr-backref-module-metpy-plots sphx-glr-backref-type-py-function"><span class="n">add_metpy_logo</span></a><span class="p">,</span> <span class="n">simple_layout</span><span class="p">,</span> <a href="../../api/generated/metpy.plots.StationPlot.html#metpy.plots.StationPlot" title="metpy.plots.StationPlot" class="sphx-glr-backref-module-metpy-plots sphx-glr-backref-type-py-class"><span class="n">StationPlot</span></a><span class="p">,</span>
-                         <a href="../../api/generated/metpy.plots.StationPlotLayout.html#metpy.plots.StationPlotLayout" title="metpy.plots.StationPlotLayout" class="sphx-glr-backref-module-metpy-plots sphx-glr-backref-type-py-class"><span class="n">StationPlotLayout</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">wx_code_map</span></a><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">metpy.plots</span> <span class="kn">import</span> <span class="p">(</span><a href="../../api/generated/metpy.plots.add_metpy_logo.html#metpy.plots.add_metpy_logo" title="metpy.plots.add_metpy_logo" class="sphx-glr-backref-module-metpy-plots sphx-glr-backref-type-py-function"><span class="n">add_metpy_logo</span></a><span class="p">,</span> <span class="n">simple_layout</span><span class="p">,</span> <a href="../../api/generated/metpy.plots.StationPlot.html#metpy.plots.StationPlot" title="metpy.plots.StationPlot" class="sphx-glr-backref-module-metpy-plots sphx-glr-backref-type-py-class"><span class="n">StationPlot</span></a><span class="p">,</span> <a href="../../api/generated/metpy.plots.StationPlotLayout.html#metpy.plots.StationPlotLayout" title="metpy.plots.StationPlotLayout" class="sphx-glr-backref-module-metpy-plots sphx-glr-backref-type-py-class"><span class="n">StationPlotLayout</span></a><span class="p">,</span>
+                         <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">wx_code_map</span></a><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">metpy.units</span> <span class="kn">import</span> <a href="https://pint.readthedocs.io/en/stable/developers_reference.html#pint.UnitRegistry" title="pint.UnitRegistry" class="sphx-glr-backref-module-pint sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">units</span></a>
 </pre></div>
 </div>
-<div class="section" id="the-setup">
+<section id="the-setup">
 <h2>The setup<a class="headerlink" href="#the-setup" title="Permalink to this headline">¶</a></h2>
-<p>First read in the data. We use <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.loadtxt.html#numpy.loadtxt" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.loadtxt</span></code></a> to read in the data and use a structured
-<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.20)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a> to allow different types for the various columns. This allows us to handle
+<p>First read in the data. We use <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.loadtxt.html#numpy.loadtxt" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.loadtxt</span></code></a> to read in the data and use a structured
+<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a> to allow different types for the various columns. This allows us to handle
 the columns with string data.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s1">&#39;station_data.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <a href="https://docs.python.org/3/library/io.html#io.BufferedReader" title="io.BufferedReader" class="sphx-glr-backref-module-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">f</span></a><span class="p">:</span>
     <span class="n">data_arr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><a href="https://docs.python.org/3/library/io.html#io.BufferedReader" title="io.BufferedReader" class="sphx-glr-backref-module-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">f</span></a><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">19</span><span class="p">),</span>
@@ -407,7 +409,7 @@ a few from around the U.S. and pull those out of the data file.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;eastward_wind&#39;, &#39;northward_wind&#39;, &#39;air_temperature&#39;, &#39;dew_point_temperature&#39;, &#39;air_pressure_at_sea_level&#39;, &#39;cloud_coverage&#39;, &#39;present_weather&#39;]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;eastward_wind&#39;, &#39;northward_wind&#39;, &#39;air_temperature&#39;, &#39;dew_point_temperature&#39;, &#39;air_pressure_at_sea_level&#39;, &#39;cloud_coverage&#39;, &#39;current_wx1_symbol&#39;]
 </pre></div>
 </div>
 <p>Next grab the simple variables out of the data we have (attaching correct units), and
@@ -445,7 +447,7 @@ layout is expecting.</p>
 <span class="c1"># Map weather strings to WMO codes, which we can use to convert to symbols</span>
 <span class="c1"># Only use the first symbol if there are multiple</span>
 <span class="n">wx_text</span> <span class="o">=</span> <span class="n">data_arr</span><span class="p">[</span><span class="s1">&#39;weather&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s1">&#39;present_weather&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">wx_code_map</span></a><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39; &#39;</span> <span class="ow">in</span> <span class="n">s</span> <span class="k">else</span> <span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">wx_text</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s1">&#39;current_wx1_symbol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">wx_code_map</span></a><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39; &#39;</span> <span class="ow">in</span> <span class="n">s</span> <span class="k">else</span> <span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">wx_text</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>All the data wrangling is finished, just need to set up plotting and go:
@@ -454,8 +456,8 @@ Set up the map projection and set up a cartopy feature for state borders</p>
                              <span class="n">standard_parallels</span><span class="o">=</span><span class="p">[</span><span class="mi">35</span><span class="p">])</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="the-payoff">
+</section>
+<section id="the-payoff">
 <h2>The payoff<a class="headerlink" href="#the-payoff" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Change the DPI of the resulting figure. Higher DPI drastically improves the</span>
 <span class="c1"># look of the text rendering</span>
@@ -497,7 +499,7 @@ Set up the map projection and set up a cartopy feature for state borders</p>
 <img alt="Station Plot with Layout" class="sphx-glr-single-img" src="../../_images/sphx_glr_Station_Plot_with_Layout_001.png" />
 <p>or instead, a custom layout can be used:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Just winds, temps, and dewpoint, with colors. Dewpoint and temp will be plotted</span>
-<span class="c1"># out to Farenheit tenths. Extra data will be ignored</span>
+<span class="c1"># out to Fahrenheit tenths. Extra data will be ignored</span>
 <a href="../../api/generated/metpy.plots.StationPlotLayout.html#metpy.plots.StationPlotLayout" title="metpy.plots.StationPlotLayout" class="sphx-glr-backref-module-metpy-plots sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">custom_layout</span></a> <span class="o">=</span> <a href="../../api/generated/metpy.plots.StationPlotLayout.html#metpy.plots.StationPlotLayout" title="metpy.plots.StationPlotLayout" class="sphx-glr-backref-module-metpy-plots sphx-glr-backref-type-py-class"><span class="n">StationPlotLayout</span></a><span class="p">()</span>
 <a href="../../api/generated/metpy.plots.StationPlotLayout.html#metpy.plots.StationPlotLayout.add_barb" title="metpy.plots.StationPlotLayout.add_barb" class="sphx-glr-backref-module-metpy-plots sphx-glr-backref-type-py-method"><span class="n">custom_layout</span><span class="o">.</span><span class="n">add_barb</span></a><span class="p">(</span><span class="s1">&#39;eastward_wind&#39;</span><span class="p">,</span> <span class="s1">&#39;northward_wind&#39;</span><span class="p">,</span> <a href="https://pint.readthedocs.io/en/stable/developers_reference.html#pint.UnitRegistry" title="pint.UnitRegistry" class="sphx-glr-backref-module-pint sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">units</span></a><span class="o">=</span><span class="s1">&#39;knots&#39;</span><span class="p">)</span>
 <a href="../../api/generated/metpy.plots.StationPlotLayout.html#metpy.plots.StationPlotLayout.add_value" title="metpy.plots.StationPlotLayout.add_value" class="sphx-glr-backref-module-metpy-plots sphx-glr-backref-type-py-method"><span class="n">custom_layout</span><span class="o">.</span><span class="n">add_value</span></a><span class="p">(</span><span class="s1">&#39;NW&#39;</span><span class="p">,</span> <span class="s1">&#39;air_temperature&#39;</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;.1f&#39;</span><span class="p">,</span> <a href="https://pint.readthedocs.io/en/stable/developers_reference.html#pint.UnitRegistry" title="pint.UnitRegistry" class="sphx-glr-backref-module-pint sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">units</span></a><span class="o">=</span><span class="s1">&#39;degF&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkred&#39;</span><span class="p">)</span>
@@ -541,7 +543,7 @@ Set up the map projection and set up a cartopy feature for state borders</p>
 </pre></div>
 </div>
 <img alt="Station Plot with Layout" class="sphx-glr-single-img" src="../../_images/sphx_glr_Station_Plot_with_Layout_002.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  2.479 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  3.607 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plots-station-plot-with-layout-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/aedfcde5d540d021d02883dc8627add4/Station_Plot_with_Layout.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">Station_Plot_with_Layout.py</span></code></a></p>
@@ -551,8 +553,8 @@ Set up the map projection and set up a cartopy feature for state borders</p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
-</div>
-</div>
+</section>
+</section>
 
 
               </div>
@@ -587,9 +589,9 @@ Set up the map projection and set up a cartopy feature for state borders</p>
     <footer class="footer mt-5 mt-md-0">
   <div class="container">
     <p>
-          &copy; Copyright 2008–2021, MetPy Developers. Development supported by National Science Foundation grants AGS-1344155, OAC-1740315, and AGS-1901712.<br/>
-        Last updated on Apr 12, 2021 at 17:36:36.<br/>
-        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+          &copy; Copyright 2008–2021, MetPy Developers.Development is supported by Unidata and the National Science Foundation..<br/>
+        Last updated on Aug 13, 2021 at 16:38:07.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
     </p>
   </div>
 </footer>

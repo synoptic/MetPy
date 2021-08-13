@@ -13,19 +13,24 @@ ImagePlot
    .. autosummary::
    
       ~ImagePlot.colorbar
+      ~ImagePlot.colorbar_fontsize
       ~ImagePlot.colormap
       ~ImagePlot.cross_validation_lock
       ~ImagePlot.data
       ~ImagePlot.field
       ~ImagePlot.griddata
       ~ImagePlot.image_range
+      ~ImagePlot.latitude
       ~ImagePlot.level
+      ~ImagePlot.longitude
       ~ImagePlot.name
       ~ImagePlot.parent
       ~ImagePlot.plot_units
       ~ImagePlot.plotdata
       ~ImagePlot.scale
       ~ImagePlot.time
+      ~ImagePlot.x
+      ~ImagePlot.y
 
    
    
@@ -46,6 +51,7 @@ ImagePlot
       ~ImagePlot.clear
       ~ImagePlot.clear_collections
       ~ImagePlot.clear_handle
+      ~ImagePlot.copy
       ~ImagePlot.draw
       ~ImagePlot.has_trait
       ~ImagePlot.hold_trait_notifications
@@ -74,19 +80,24 @@ ImagePlot
 
    
    .. autoattribute:: colorbar
+   .. autoattribute:: colorbar_fontsize
    .. autoattribute:: colormap
    .. autoattribute:: cross_validation_lock
    .. autoattribute:: data
    .. autoattribute:: field
    .. autoattribute:: griddata
    .. autoattribute:: image_range
+   .. autoattribute:: latitude
    .. autoattribute:: level
+   .. autoattribute:: longitude
    .. autoattribute:: name
    .. autoattribute:: parent
    .. autoattribute:: plot_units
    .. autoattribute:: plotdata
    .. autoattribute:: scale
    .. autoattribute:: time
+   .. autoattribute:: x
+   .. autoattribute:: y
 
    
    
@@ -106,6 +117,7 @@ ImagePlot
    .. automethod:: clear
    .. automethod:: clear_collections
    .. automethod:: clear_handle
+   .. automethod:: copy
    .. automethod:: draw
    .. automethod:: has_trait
    .. automethod:: hold_trait_notifications
