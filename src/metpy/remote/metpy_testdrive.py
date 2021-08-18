@@ -1,4 +1,4 @@
-from SynopticData import TimeSeries
+from metpy.remote.SynopticData import TimeSeries, Latest, SynopticData
 import pandas as pd
 from pint import UnitRegistry
 
@@ -9,13 +9,14 @@ ureg = UnitRegistry()
 # Test 0: multiple stations & variables
 # ==============================================================================
 # Inputs
+service = 'TimeSeries'
 station = {'stid': ['KMSO', 'KSLC'],
            'vars': ['air_temp', 'wind_speed']}
 time = {'start': 202108150000,
         'end': 202108160000}
 
 # Instantiate timeseries class
-ts = TimeSeries('demotoken', station, time)
+ts = SynopticData('demotoken', service, station, time)
 #ts.estimate_usage() #NOTE: this is broken but likely fixed w/ Ted's obrange patch
 
 # Make data request
@@ -51,7 +52,7 @@ column = 'wind_gust_set_1'
 all_gust = data_df.loc[:,column].values * ureg(units[column])
 
 
-# ==============================================================================
+f# ==============================================================================
 # Test 2: Mimic the call on the QC page on the API to get a query with flagged
 # data
 # ==============================================================================
@@ -107,6 +108,33 @@ opt_params = {'obtimezone': 'local'}
 ts = TimeSeries('demotoken', station, time, opt_params)
 data_df, meta_df, units = ts.request_data()
 
+
+# ==============================================================================
+# Test 5: Latest call
+# ==============================================================================
+# integer and string list elements are handled
+station = {'state': 'MT',
+           'vars': ['air_temp']}
+time = {'minmax': 7}
+opt_params = {'obtimezone': 'local'}
+latest = Latest('demotoken', station, time, opt_params)
+data_df, meta_df, units = latest.request_data()
+# LATEST RETURNS DIFFERENT DATA FORMAT!
+
+
+# ==============================================================================
+# Test 6: Universal class test
+# ==============================================================================
+service = 'NearestTime'
+station = {'county': 'multnomah',
+           'state': 'OR',
+           'vars': 'air_temp'}
+time = {'attime': 202106280000,
+        'within': 120}
+opt_params = {'obtimezone': 'local',
+              'units': 'temp|F'}
+pdx_temperature = SynopticData('demotoken', service, station, time, opt_params)
+pdx_df, pdx_meta, pdx_units = pdx_temperature.request_data()
 
 # ---------------------------------
 # Optional parameters
