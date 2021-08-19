@@ -1,4 +1,4 @@
-from metpy.remote.SynopticData import TimeSeries, Latest, SynopticData
+from metpy.remote.SynopticData import SynopticData
 import pandas as pd
 from pint import UnitRegistry
 
@@ -15,18 +15,17 @@ station = {'stid': ['KMSO', 'KSLC'],
 time = {'start': 202108150000,
         'end': 202108160000}
 
-# Instantiate timeseries class
-ts = SynopticData('demotoken', service, station, time)
-#ts.estimate_usage() #NOTE: this is broken but likely fixed w/ Ted's obrange patch
+# Instantiate class
+timeseries = SynopticData('demotoken', service, station, time)
 
 # Make data request
-data_df, meta_df, units = ts.request_data()
+stn_data, stn_meta, stn_units = timeseries.request_data()
 
 # Report all temperature and attach units
 column = 'air_temp_set_1'
-all_temp = data_df.loc[:, column].values * ureg(units[column])
+all_temp = stn_data[column].values * ureg(stn_units[column])
 # Report kmso temperature and attach units
-kmso_temp = data_df.loc['KMSO',column].values * ureg(units[column])
+kmso_temp = stn_data.loc['KMSO',column].values * ureg(stn_units[column])
 
 # Slice air temp at KMSO by a specific time range
 t0 = pd.to_datetime("08/15/21 12:00").tz_localize('UTC')
@@ -113,12 +112,13 @@ data_df, meta_df, units = ts.request_data()
 # Test 5: Latest call
 # ==============================================================================
 # integer and string list elements are handled
+service = 'Latest'
 station = {'state': 'MT',
            'vars': ['air_temp']}
 time = {'minmax': 7}
 opt_params = {'obtimezone': 'local'}
-latest = Latest('demotoken', station, time, opt_params)
-data_df, meta_df, units = latest.request_data()
+latest = SynopticData('demotoken', service, station, time, opt_params)
+mt_data, mt_meta, mt_units = latest.request_data()
 # LATEST RETURNS DIFFERENT DATA FORMAT!
 
 
@@ -133,8 +133,11 @@ time = {'attime': 202106280000,
         'within': 120}
 opt_params = {'obtimezone': 'local',
               'units': 'temp|F'}
-pdx_temperature = SynopticData('demotoken', service, station, time, opt_params)
-pdx_df, pdx_meta, pdx_units = pdx_temperature.request_data()
+nearest = SynopticData('demotoken', service, station, time, opt_params)
+pdx_data, pdx_meta, pdx_units = nearest.request_data()
+
+
+
 
 # ---------------------------------
 # Optional parameters

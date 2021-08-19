@@ -73,9 +73,9 @@ def return_stn_df(data, stn_index, date_format, qc_flag, service):
     '''
     # Site meta
     stid = data['STATION'][stn_index]['STID']
-    lat = data['STATION'][stn_index]['LATITUDE']
-    lon = data['STATION'][stn_index]['LONGITUDE']
-    elev = data['STATION'][stn_index]['ELEVATION']
+    lat = float(data['STATION'][stn_index]['LATITUDE'])
+    lon = float(data['STATION'][stn_index]['LONGITUDE'])
+    elev = int(data['STATION'][stn_index]['ELEVATION'])
     meta_df = pd.DataFrame([[stid, lon, lat, elev]], columns=["stid", "lon", "lat", "elev"])
     meta_df.set_index('stid', inplace=True)
 
@@ -84,12 +84,14 @@ def return_stn_df(data, stn_index, date_format, qc_flag, service):
     if service == 'TimeSeries':
         datetime = pd.to_datetime(data_out['date_time'], format=(date_format))
         del data_out['date_time']
-        multi_index = pd.MultiIndex.from_product([[stid], datetime], names=["stid", "dattim"])
+        multi_index = pd.MultiIndex.from_product([[stid], [lat], [lon], [elev], datetime],
+                                                 names=["stid", "latitude", "longitude", "elevation", "dattim"])
     else:
         datetime = pd.to_datetime(data_out[list(data_out.keys())[0]]['date_time'], format=(date_format))
         for key in data_out:
             data_out.update({key: data_out[key]['value']})
-        multi_index = pd.MultiIndex.from_arrays([[stid], [datetime]], names=["stid", "dattim"])
+        multi_index = pd.MultiIndex.from_arrays([[stid], [lat], [lon], [elev], [datetime]],
+                                                names=["stid", "latitude", "longitude", "elevation", "dattim"])
     data_df = pd.DataFrame(data_out, index=multi_index)
 
     # Build dataframe of qc_flags if qc_flags were requested
