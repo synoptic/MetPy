@@ -23,26 +23,30 @@ time = {'within': 120}
 opt_params = {'obtimezone': 'local',
               'units': 'temp|F'}
 latest = SynopticData('demotoken', service, station, time, opt_params)
-mt_data, mt_meta, mt_units = latest.request_data()
+mt_data, mt_units, mt_meta  = latest.request_data()
 
 # Remove any stations lacking temperature, wind_speed, or wind_direction
-mt_data.dropna(axis=0, how='any', inplace=True)
-
+rows_with_nan = [index for index, row in mt_data.iterrows() if row.isnull().any()]
+stid_nan = [i[0] for i in rows_with_nan]
+stid_nan = list(set(stid_nan))
+mt_data = mt_data.drop(rows_with_nan)
+mt_meta = mt_meta.drop(stid_nan)
 
 
 # Reduce point density for visualization
 proj = ccrs.LambertConformal(central_longitude=-109)
-point_locs = proj.transform_points(ccrs.PlateCarree(), mt_data.index.get_level_values('longitude').values, mt_data.index.get_level_values('latitude').values)
+point_locs = proj.transform_points(ccrs.PlateCarree(), mt_meta['lon'].values, mt_meta['lat'].values)
 reduction = mpcalc.reduce_point_density(point_locs, 50 * units.km)
 mt_data = mt_data[reduction]
+mt_meta = mt_meta[reduction]
 
 # Read in data & assign units to the data to be plotted
 temperature = mt_data['air_temp_value_1'].values * units[mt_units['air_temp_value_1']]
 wind_speed = mt_data['wind_speed_value_1'].values * units[mt_units['wind_speed_value_1']]
 wind_direction = mt_data['wind_direction_value_1'].values * units[mt_units['wind_direction_value_1']]
-latitude = mt_data.index.get_level_values('latitude').values
-longitude = mt_data.index.get_level_values('longitude').values
-station_id = mt_data.index.get_level_values('stid').values
+latitude = mt_meta['lat'].values
+longitude = mt_meta['lon'].values
+station_id = mt_meta.index.values
 
 # Take cardinal direction and convert to degrees, then convert to components
 u, v = mpcalc.wind_components(wind_speed.to('knots'), wind_direction)

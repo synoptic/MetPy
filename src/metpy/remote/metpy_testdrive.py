@@ -14,12 +14,12 @@ station = {'stid': ['KMSO', 'KSLC'],
            'vars': ['air_temp', 'wind_speed']}
 time = {'start': 202108150000,
         'end': 202108160000}
-
+opt_params = {'qc': 'on'}
 # Instantiate class
-timeseries = SynopticData('demotoken', service, station, time)
+timeseries = SynopticData('demotoken', service, station, time, opt_params)
 
 # Make data request
-stn_data, stn_meta, stn_units = timeseries.request_data()
+stn_data, stn_units, stn_meta, qc = timeseries.request_data()
 
 # Report all temperature and attach units
 column = 'air_temp_set_1'
@@ -30,7 +30,7 @@ kmso_temp = stn_data.loc['KMSO',column].values * ureg(stn_units[column])
 # Slice air temp at KMSO by a specific time range
 t0 = pd.to_datetime("08/15/21 12:00").tz_localize('UTC')
 t1 = pd.to_datetime("08/15/21 21:00").tz_localize('UTC')
-data_df.loc['KMSO', 'air_temp_set_1'][t0:t1]
+stn_data.loc['KMSO', 'air_temp_set_1'][t0:t1]
 
 
 # ==============================================================================
@@ -42,16 +42,16 @@ time = {'recent':60}
 opt_params = {'qc': 'on',
               'units': ['speed|mph', 'temp|F']}
 # No need to re-instantiate the class!
-ts.station = station
-ts.time = time
-ts.opt_params = opt_params
-data_df, meta_df, qc_df, units = ts.request_data()
+timeseries.station = station
+timeseries.time = time
+timeseries.opt_params = opt_params
+mt_data, mt_units, mt_meta, mt_qc = timeseries.request_data()
 # Report all wind_gust
 column = 'wind_gust_set_1'
-all_gust = data_df.loc[:,column].values * ureg(units[column])
+all_gust = mt_data.loc[:,column].values * ureg(mt_units[column])
 
 
-f# ==============================================================================
+# ==============================================================================
 # Test 2: Mimic the call on the QC page on the API to get a query with flagged
 # data
 # ==============================================================================
@@ -60,10 +60,10 @@ station = {'radius': ['KHOU','30'],
 time = {'start': 201906170000,
         'end': 201906190000}
 opt_params = {'qc':'on'}
-ts.station = station
-ts.time = time
-ts.opt_params = opt_params
-data_df, meta_df, qc_df, units = ts.request_data()
+timeseries.station = station
+timeseries.time = time
+timeseries.opt_params = opt_params
+khou_data, khou_units, khou_meta, khou_qc = timeseries.request_data()
 
 
 # ==============================================================================
@@ -75,10 +75,10 @@ station = {'county':'missoula',
 time = {'recent':60}
 opt_params = {'obtimezone': 'local',
               'units': ['speed|mph']}
-ts.station = station
-ts.time = time
-ts.opt_params = opt_params
-data_df, meta_df, units = ts.request_data()
+timeseries.station = station
+timeseries.time = time
+timeseries.opt_params = opt_params
+mso_data, mso_units, mso_meta = timeseries.request_data()
 
 
 # ==============================================================================
@@ -89,13 +89,13 @@ station = {'radius': ['KMSO', 60],
            'vars': 'PM_25_concentration'}
 time = {'recent': 120}
 opt_params = {'obtimezone': 'local'}
-ts.station = station
-ts.time = time
-ts.opt_params = opt_params
-data_df, meta_df, units = ts.request_data()
+timeseries.station = station
+timeseries.time = time
+timeseries.opt_params = opt_params
+aq_data, aq_units, aq_meta = timeseries.request_data()
 # Check units
 column = 'PM_25_concentration_set_1'
-pm25 = data_df.loc[:, column].values * ureg(units[column])
+pm25 = aq_data.loc[:, column].values * ureg(aq_units[column])
 
 # ==============================================================================
 # Test 5: MT mesonet
@@ -104,9 +104,8 @@ pm25 = data_df.loc[:, column].values * ureg(units[column])
 station = {'stid': 'MTM06'}
 time = {'recent': 120}
 opt_params = {'obtimezone': 'local'}
-ts = TimeSeries('demotoken', station, time, opt_params)
-data_df, meta_df, units = ts.request_data()
-
+timeseries = SynopticData('demotoken', 'TimeSeries', station, time, opt_params)
+mtm_data, mtm_units, mtm_meta = timeseries.request_data()
 
 # ==============================================================================
 # Test 5: Latest call
@@ -118,9 +117,7 @@ station = {'state': 'MT',
 time = {'minmax': 7}
 opt_params = {'obtimezone': 'local'}
 latest = SynopticData('demotoken', service, station, time, opt_params)
-mt_data, mt_meta, mt_units = latest.request_data()
-# LATEST RETURNS DIFFERENT DATA FORMAT!
-
+mt_data, mt_units, mt_meta = latest.request_data()
 
 # ==============================================================================
 # Test 6: Universal class test
@@ -134,7 +131,7 @@ time = {'attime': 202106280000,
 opt_params = {'obtimezone': 'local',
               'units': 'temp|F'}
 nearest = SynopticData('demotoken', service, station, time, opt_params)
-pdx_data, pdx_meta, pdx_units = nearest.request_data()
+pdx_data, pdx_units, pdx_meta = nearest.request_data()
 
 
 
