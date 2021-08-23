@@ -29,62 +29,145 @@ def build_query_string(qsp_dic):
     for k in qsp_dic.keys():
         if isinstance(qsp_dic[k], list):
             qsp_dic[k] = ','.join(map(str,qsp_dic[k]))
-    # Build query string
+    # Build query stringith
     query_string = urllib.parse.urlencode(qsp_dic)
     return query_string
 
 
-def return_stn_df(data, stn_index, date_format, qc_flag, service):
+def return_stn_df(data, date_format, qc_flag, service):
     '''
     '''
     # Site meta
-    stid = data['STATION'][stn_index]['STID']
-    lat = float(data['STATION'][stn_index]['LATITUDE'])
-    lon = float(data['STATION'][stn_index]['LONGITUDE'])
-    elev = int(data['STATION'][stn_index]['ELEVATION'])
-    meta_df = pd.DataFrame([[stid, lon, lat, elev]], columns=["stid", "lon", "lat", "elev"])
+    meta_list = []
+    for i in range(len(data)):
+        # Meta
+        stid = data[i]['STID']
+        try:
+            lon = float(data[i]['LONGITUDE'])
+        except TypeError:
+            lon = None
+        try:
+            lat = float(data[i]['LATITUDE'])
+        except TypeError:
+            lat = None
+        try:
+            elev = float(data[i]['ELEVATION'])
+        except TypeError:
+            elev = None
+        meta_list.append([stid, lon, lat, elev])
+
+        # Data
+        data_out = data[i]['OBSERVATIONS'].copy()
+        if service == 'TimeSeries':
+            datetime = pd.to_datetime(data_out['date_time'], format=(date_format))
+            del data_out['date_time']
+            multi_index = pd.MultiIndex.from_product([[stid], datetime],
+                                                     names=["stid", "dattim"])
+        else:
+            datetime = pd.to_datetime(data_out[list(data_out.keys())[0]]['date_time'], format=(date_format))
+            for key in data_out:
+                data_out.update({key: data_out[key]['value']})
+            multi_index = pd.MultiIndex.from_arrays([[stid], [datetime]],
+                                                    names=["stid", "dattim"])
+        df = pd.DataFrame(data_out, index=multi_index)
+
+        # QC
+        if qc_flag:
+            qc_out = {}
+            if 'QC' in data[i].keys():
+                qc_out = data[i]['QC'].copy()
+            stn_qc = pd.DataFrame(qc_out, index=multi_index)
+        else:
+            stn_qc = None
+
+        #Concatenate as needed
+        if i == 0:
+            data_df = pd.DataFrame(data_out, index=multi_index)
+            qc_df = pd.DataFrame(stn_qc)
+        else:
+            data_df = pd.concat([data_df, pd.DataFrame(data_out, index=multi_index)], axis=0)
+            qc_df = pd.concat([qc_df, stn_qc], axis=0)
+
+    meta_df = pd.DataFrame(meta_list, columns=["stid", "lon", "lat", "elev"])
     meta_df.set_index('stid', inplace=True)
 
-    # Site data
-    data_out = data['STATION'][stn_index]['OBSERVATIONS'].copy()
-    if service == 'TimeSeries':
-        datetime = pd.to_datetime(data_out['date_time'], format=(date_format))
-        del data_out['date_time']
-        multi_index = pd.MultiIndex.from_product([[stid], datetime],
-                                                 names=["stid", "dattim"])
-    else:
-        datetime = pd.to_datetime(data_out[list(data_out.keys())[0]]['date_time'], format=(date_format))
-        for key in data_out:
-            data_out.update({key: data_out[key]['value']})
-        multi_index = pd.MultiIndex.from_arrays([[stid], [datetime]],
-                                                names=["stid", "dattim"])
-    data_df = pd.DataFrame(data_out, index=multi_index)
-
-    # Build dataframe of qc_flags if qc_flags were requested
-    if qc_flag:
-        qc_out = {}
-        if 'QC' in data['STATION'][stn_index].keys():
-            qc_out = data['STATION'][stn_index]['QC'].copy()
-        qc_df = pd.DataFrame(qc_out, index=multi_index)
-    else:
-        qc_df = None
     return data_df, meta_df, qc_df
 
 
-def variable_details(data, stn_index):
-    stid = data['STATION'][stn_index]['STID']
-    sensor_dic = data['STATION'][stn_index]['SENSOR_VARIABLES']
-    position = {}
-    derived_from = {}
-    for key in sensor_dic.keys():
-        for child_key in sensor_dic[key].keys():
-            if 'position' in sensor_dic[key][child_key].keys():
-                position_string = sensor_dic[key][child_key]['position']
-                if position_string != '':
-                    position.update({child_key: float(position_string)})
-            if 'derived_from' in sensor_dic[key][child_key].keys():
-                derived_from.update({child_key: sensor_dic[key][child_key]['derived_from']})
-    return {stid: position}, {stid: derived_from}
+def return_precip_df(data, date_format, pmode):
+    # Site meta
+    meta_list = []
+    for i in range(len(data)):
+        # Meta
+        stid = data[i]['STID']
+        try:
+            lon = float(data[i]['LONGITUDE'])
+        except TypeError:
+            lon = None
+        try:
+            lat = float(data[i]['LATITUDE'])
+        except TypeError:
+            lat = None
+        try:
+            elev = float(data[i]['ELEVATION'])
+        except TypeError:
+            elev = None
+        meta_list.append([stid, lon, lat, elev])
+
+        # JSON formats are different for requests with 'pmode' specified
+        from_time = []
+        to_time = []
+        precip = []
+        if pmode:
+            data_out = data[i]['OBSERVATIONS']['precipitation']
+            for j in range(len(data_out)):
+                from_time.append(data_out[j]['first_report'])
+                to_time.append(data_out[j]['last_report'])
+                precip.append(data_out[j]['total'])
+        else:
+            data_out = data[i]['OBSERVATIONS']
+            from_time.append(data_out['ob_start_time_1'])
+            to_time.append(data_out['ob_end_time_1'])
+            precip.append(data_out['total_precip_value_1'])
+        from_time = pd.to_datetime(from_time, format=(date_format))
+        to_time = pd.to_datetime(to_time, format=(date_format))
+        indices = [(stid, from_time[c], to_time[c]) for c in range(len(from_time))]
+        multi_index = pd.MultiIndex.from_tuples(indices, names=["stid", "from", "to"])
+        #breakpoint()
+        #Concatenate as needed
+        if i == 0:
+            data_df = pd.DataFrame(precip, index=multi_index, columns=['precipitation'])
+        else:
+            d = pd.DataFrame(precip, index=multi_index, columns=['precipitation'])
+            data_df = pd.concat([data_df, d], axis=0)
+
+    meta_df = pd.DataFrame(meta_list, columns=["stid", "lon", "lat", "elev"])
+    meta_df.set_index('stid', inplace=True)
+
+    return data_df, meta_df
+
+
+def variable_details(data):
+    '''
+    '''
+    position_details = {}
+    derived_from_details = {}
+    for i in range(len(data)):
+        stid = data[i]['STID']
+        sensor_dic = data[i]['SENSOR_VARIABLES']
+        position = {}
+        derived_from = {}
+        for key in sensor_dic.keys():
+            for child_key in sensor_dic[key].keys():
+                if 'position' in sensor_dic[key][child_key].keys():
+                    position_string = sensor_dic[key][child_key]['position']
+                    if position_string != '':
+                        position.update({child_key: float(position_string)})
+                if 'derived_from' in sensor_dic[key][child_key].keys():
+                    derived_from.update({child_key: sensor_dic[key][child_key]['derived_from']})
+        position_details.update({stid: position})
+        derived_from_details.update({stid: derived_from})
+    return position_details, derived_from_details
 
 
 # TEST -- single class for timeseries, latest, and nearest services
@@ -96,7 +179,7 @@ class SynopticData():
     Attributes
     ----------
     service : str
-            Synoptic service to query. 'TimeSeries', 'Latest', or 'NearestTime'
+            Synoptic service to query. 'TimeSeries', 'Latest', 'NearestTime', or 'Precip'
     station : dic
             Dictionary of station selectors and values for data request, where dic
             keys are 'selectors' in SynopticData API parlance, and values are strings
@@ -113,26 +196,30 @@ class SynopticData():
     """
     def __init__(self, token, service, station, time={}, opt_params={}):
         # Confirm the service is valid
-        if service == 'TimeSeries' or service == 'timeseries':
+        if service == 'TimeSeries':
             valid_time_keys = ['start', 'end', 'recent']
             self.url0 = "https://api.synopticdata.com/v2/stations/timeseries?"
-            self.service = 'TimeSeries'
-        elif service == 'Latest' or service == 'latest':
+            self.service = service
+        elif service == 'Latest':
             valid_time_keys = ['within', 'minmax', 'minmaxtype']
             self.url0 = "https://api.synopticdata.com/v2/stations/latest?"
-            self.service = 'Latest'
-        elif service == 'NearestTime' or service == 'nearesttime':
+            self.service = service
+        elif service == 'NearestTime':
             valid_time_keys = ['within', 'attime']
             self.url0 = "https://api.synopticdata.com/v2/stations/nearesttime?"
-            self.service = 'NearestTime'
+            self.service = service
+        elif service == 'Precip':
+            valid_time_keys = ['start', 'end', 'recent']
+            self.url0 = "https://api.synopticdata.com/v2/stations/precip?"
+            self.service = service
         else:
             sys.exit('Invalid Service')
-        self.service = service
 
         # Confirm the station keys are valid
         stn_keys = ['stid','state','country','nwszone','nwsfirezone','cwa',\
-            'gacc','subgacc','county','vars','varsoperator','network',\
-            'radius','bbox','status','complete','fields']
+                    'gacc','subgacc','county','vars','varsoperator','network',\
+                    'radius','bbox','status','complete','fields','networkimportance',\
+                    'spacing']
         if station:
             invalid_stns = set(station.keys()) - set(stn_keys)
             if len(invalid_stns) > 0:
@@ -173,6 +260,12 @@ class SynopticData():
             if 'precip' in self.station['vars'] and 'precip' not in self.opt_params.keys():
                 self.opt_params['precip'] = 1
 
+        # If this is a Precip request, check to see if pmode is defined
+        if 'pmode' in self.opt_params.keys():
+            self.pmode = 1
+        else:
+            self.pmode = None
+
         # Check if there is a qc_flag request
         if ('qc_flag','on') in self.opt_params.items():
             self.qc_flag = 1
@@ -207,23 +300,15 @@ class SynopticData():
             sys.exit(self.data['SUMMARY']['RESPONSE_MESSAGE'])
         # Else build out data & metadata dataframes, and units dic
         else:
-            for i in range(len(self.data['STATION'])):
-                if i == 0:
-                    data_df, meta_df, qc_df = return_stn_df(self.data, i, time_format, self.qc_flag, self.service)
-                    position, derived_from = variable_details(self.data, i)
-                else:
-                    df1, meta1, qc1 = return_stn_df(self.data, i, time_format, self.qc_flag, self.service)
-                    data_df = pd.concat([data_df, df1], axis=0)
-                    meta_df = pd.concat([meta_df, meta1], axis=0)
-                    position1, derived_from1 = variable_details(self.data, i)
-                    position.update(position1)
-                    derived_from.update(derived_from1)
-                    if self.qc_flag:
-                        qc_df = pd.concat([qc_df, qc1], axis=0)
+            if self.service != 'Precip':
+                data_df, meta_df, qc_df = return_stn_df(self.data['STATION'], time_format, self.qc_flag, self.service)
+                position, derived_from = variable_details(self.data['STATION'])
+                self.variable_position = position
+                self.variable_derived_from = derived_from
+            else:
+                data_df, meta_df = return_precip_df(self.data['STATION'], time_format, self.pmode)
             self.data_df = data_df
             self.meta_df = meta_df
-            self.variable_position = position
-            self.variable_derived_from = derived_from
 
             # Change unit variable names to be pint-compatible & build out dic
             units = self.data['UNITS']

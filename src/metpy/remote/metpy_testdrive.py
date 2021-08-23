@@ -133,6 +133,18 @@ opt_params = {'obtimezone': 'local',
 nearest = SynopticData('demotoken', service, station, time, opt_params)
 pdx_data, pdx_units, pdx_meta = nearest.request_data()
 
+# ==============================================================================
+# Test 7: Precip test
+# ==============================================================================
+service = 'Precip'
+station = {'stid': ['KMSO','KSLC']}
+time = {'start': 202108200000,
+        'end': 202108230000}
+opt_params = {'obtimezone': 'local',
+              'pmode': 'intervals',
+              'interval': 4}
+precip = SynopticData('yo', service, station, time, opt_params)
+precip_data, precip_units, precip_meta = precip.request_data()
 
 
 
