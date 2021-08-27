@@ -91,6 +91,9 @@ def return_stn_df(data, date_format, qc_flag, service):
     meta_df = pd.DataFrame(meta_list, columns=["stid", "lon", "lat", "elev"])
     meta_df.set_index('stid', inplace=True)
 
+    # Sort the resulting dataframe by time
+    data_df.sort_index(inplace=True)
+
     return data_df, meta_df, qc_df
 
 
@@ -238,6 +241,77 @@ class SynopticData():
         self.token = token
         self.opt_params = opt_params
 
+    def estimate_usage(self):
+        '''
+        Make a call to metadata if necessary and estimate the data usage
+        from the current request
+        '''
+        # Build url string
+        self.meta_url = 'https://api.synopticdata.com/v2/stations/metadata?'
+
+        # Build single dictionary for url query string
+        self.meta_dic = self.station
+        if self.time:
+            tz = timezone.utc
+            if 'recent' in self.time.keys():
+                end = datetime.now(tz)
+                strt = end - timedelta(minutes=self.time['recent'])
+            elif 'start' in self.time.keys():
+                strt = datetime.strptime(str(self.time['start']), '%Y%m%d%H%M').replace(tzinfo=timezone.utc)
+                end = datetime.strptime(str(self.time['end']), '%Y%m%d%H%M').replace(tzinfo=timezone.utc)
+            else:
+                # Default for Latest & Nearest
+                strt = datetime.now(tz)
+            # Check if time is too recent: if so, set request to return active
+            # stations. Otherwise use obrange
+            if strt > datetime.now(tz) - timedelta(days=30):
+                self.meta_dic.update({'status': 'active'})
+            else:
+                end = end.strftime('%Y%m%d')
+                strt = strt.strftime('%Y%m%d')
+                self.meta_dic.update({'obrange': [strt,end]})
+        self.meta_dic.update({'sensorvars': 1})
+        self.meta_dic.update({'token': self.token})
+        query_string = build_query_string(self.meta_dic)
+        self.meta_url = self.meta_url + query_string
+
+        # Send request to metadata service
+        meta_response = urllib.request.urlopen(self.meta_url)
+        metadata = json.loads(meta_response.read())
+
+        # Check that the API call was valid
+        if metadata['SUMMARY']['RESPONSE_CODE'] != 1:
+            sys.exit(self.metadata['SUMMARY']['RESPONSE_MESSAGE'])
+        else:
+            # Estimate data usage from the metadata return
+            if 'recent' in self.time.keys():
+                num_hrs = int(self.time['recent'])/60.
+            elif 'start' in self.time.keys():
+                start_time = pd.to_datetime(self.time['start'], format='%Y%m%d%H%M')
+                end_time = pd.to_datetime(self.time['end'], format='%Y%m%d%H%M')
+                dt = end_time - start_time
+                num_hrs = dt.total_seconds()/(60.**2)
+            else:
+                # This is used for Latest & NearestTime
+                num_hrs = 1
+            num_stns = metadata['SUMMARY']['NUMBER_OF_OBJECTS']
+            if 'vars' in self.station.keys():
+                num_vars = len(self.station['vars'].split(","))
+            else:
+                # estimate number of variables based on all variables in stn
+                # database
+                num_vars = 0
+                for station in metadata['STATION']:
+                    num_vars += len(station['SENSOR_VARIABLES'].keys())
+            # usage estimates are based on 5 minute and hourly measurement intervals
+            print("Request will return data for {} stations.".format(int(num_stns)))
+            if self.service == 'TimeSeries':
+                usage_min = int(np.around(num_hrs*num_stns*num_vars,-1))
+                usage_max = int(np.around((60./5.)*num_hrs*num_stns*num_vars, -1))
+                print("Roughly {}-{} service units (SU's) will be used".format(usage_min, usage_max))
+            else:
+                usage = int(num_hrs*num_stns*num_vars)
+                print("Roughly {} service units (SU's) will be used".format(usage))
 
     def request_data(self):
         """Build url string, send API data request, and return parsed data
@@ -396,85 +470,6 @@ class SynopticData():
 #         self.url0 = "https://api.synopticdata.com/v2/stations/timeseries?"
 
 
-#     def estimate_usage(self):
-#         '''
-#         TODO: THIS NEEDS TO BE RETHOUGHT -- OBRANGE IS APPARENTLY NOT FUNCTIONAL
-
-#         Make a call to metadata if necessary and estimate the data usage
-#         from the current request
-#         '''
-#         # Build url string
-#         self.meta_url = 'https://api.synopticdata.com/v2/stations/metadata?'
-
-#         # Station identifier for url
-#         if self.station:
-#             meta_dic = {}
-#             for key in self.station.keys():
-#                 if key == 'vars':
-#                     pass
-#                 else:
-#                     meta_dic[key] = self.station[key]
-#             #NOTE: append_param is now deprecated
-#             self.meta_url = append_param(self.meta_url, meta_dic)
-
-#         # Timing for url
-#         if self.time:
-#             tz = timezone.utc
-#             if 'recent' in self.time.keys():
-#                 end = datetime.now(tz)
-#                 strt = end - timedelta(minutes=self.time['recent'])
-#             else:
-#                 strt = datetime.strptime(str(self.time['start']), '%Y%m%d%H%M').replace(tzinfo=timezone.utc)
-#                 end = datetime.strptime(str(self.time['end']), '%Y%m%d%H%M').replace(tzinfo=timezone.utc)
-#             # Check if time is too recent: if so, set request to return active
-#             # stations. Otherwise use obrange
-#             if strt > datetime.now(tz) - timedelta(days=30):
-#                 self.meta_url += 'status=active&'
-#             else:
-#                 end = end.strftime('%Y%m%d')
-#                 strt = strt.strftime('%Y%m%d')
-#                 self.meta_url += 'obrange=' + strt + ',' + end + '&'
-
-#         # Add sensor variables -- don't confirm that the sensor variables
-#         # are all valid for the exact time period requested, but use this
-#         # as a general check of the # of variables we should expect
-#         self.meta_url += 'sensorvars=1&'
-
-#         # append token
-#         self.meta_url += 'token='+self.token
-
-#         # Send request to metadata service
-#         meta_response = urllib.request.urlopen(self.meta_url)
-#         metadata = json.loads(meta_response.read())
-
-#         # Check that the API call was valid
-#         if metadata['SUMMARY']['RESPONSE_CODE'] != 1:
-#             print('Usage estimation failed with API error:')
-#             print(metadata['SUMMARY']['RESPONSE_MESSAGE'])
-#             sys.exit()
-#         else:
-#             # Estimate data usage from the metadata return
-#             if 'recent' in self.time.keys():
-#                 num_hrs = int(self.time['recent'])/60.
-#             else:
-#                 start_time = pd.to_datetime(self.time['start'], format='%Y%m%d%H%M')
-#                 end_time = pd.to_datetime(self.time['end'], format='%Y%m%d%H%M')
-#                 dt = end_time - start_time
-#                 num_hrs = dt.total_seconds()/(60.**2)
-#             num_stns = metadata['SUMMARY']['NUMBER_OF_OBJECTS']
-#             if 'vars' in self.station.keys():
-#                 num_vars = len(self.station['vars'].split(","))
-#             else:
-#                 # estimate number of variables based on all variables in stn
-#                 # database
-#                 num_vars = 0
-#                 for station in metadata['STATION']:
-#                     num_vars += len(station['SENSOR_VARIABLES'].keys())
-#             # usage estimates are based on 5 minute and hourly measurement intervals
-#             usage_min = int(np.around(num_hrs*num_stns*num_vars,-1))
-#             usage_max = int(np.around((60./5.)*num_hrs*num_stns*num_vars, -1))
-#             print("Request will return data for {} stations. \n".format(int(num_stns)))
-#             print("Roughly {}-{} service units (SU's) will be used".format(usage_min, usage_max))
 
 #     def request_data(self):
 #         '''

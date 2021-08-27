@@ -1,4 +1,5 @@
 from metpy.remote.SynopticData import SynopticData
+from metpy.units import units
 import pandas as pd
 from pint import UnitRegistry
 
@@ -23,7 +24,7 @@ stn_data, stn_units, stn_meta, qc = timeseries.request_data()
 
 # Report all temperature and attach units
 column = 'air_temp_set_1'
-all_temp = stn_data[column].values * ureg(stn_units[column])
+pall_temp = stn_data[column].values * ureg(stn_units[column])
 # Report kmso temperature and attach units
 kmso_temp = stn_data.loc['KMSO',column].values * ureg(stn_units[column])
 
@@ -143,7 +144,7 @@ time = {'start': 202108200000,
 opt_params = {'obtimezone': 'local',
               'pmode': 'intervals',
               'interval': 4}
-precip = SynopticData('yo', service, station, time, opt_params)
+precip = SynopticData('demotoken', service, station, time, opt_params)
 precip_data, precip_units, precip_meta = precip.request_data()
 
 
