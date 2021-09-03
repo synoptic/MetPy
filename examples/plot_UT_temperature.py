@@ -20,7 +20,7 @@ import pandas as pd
 import datetime
 from zoneinfo import ZoneInfo
 
-from metpy.remote.SynopticData import SynopticData
+from metpy.remote import SynopticData
 from metpy.plots import USCOUNTIES
 import metpy.calc as mpcalc
 #from metpy.cbook import get_test_data

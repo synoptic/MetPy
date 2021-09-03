@@ -17,6 +17,7 @@ Reference Guide
    metpy.plots.ctables
    metpy.interpolate
    metpy.xarray
+   metpy.remote
 
 .. toctree::
 
