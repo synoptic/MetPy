@@ -303,8 +303,8 @@ class SynopticData():
 
         #print url string, and make data request
         print ('API Request url: \n {}'.format(self.url))
-        response = urllib.request.urlopen(self.url)
-        self.data = json.loads(response.read())
+        with urllib.request.urlopen(self.url) as response:
+            self.data = json.loads(response.read())        
 
         # Set time format
         if 'timeformat' in self.opt_params.keys():
