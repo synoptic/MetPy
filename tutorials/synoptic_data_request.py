@@ -36,11 +36,16 @@ Synoptic Data offers four primary API services for accessing data:
 
 4. `Precip <https://developers.synopticdata.com/mesonet/v2/stations/precipitation/>`_
 
-To get started, you need a `user account and token <https://developers.synopticdata.com/signup/>`_.
-Academic and non-commercial usage is free, and includes generous limits on
-`monthly API usage <https://synopticdata.com/pricing>`_.
+Synoptic's Open Access Tier provides free and unrestricted access to all public station data in Time 
+Series, Nearest Time, and Latest Services. Data requests to these API endpoints require a token 
+associated with a user account. To open an account and fetch a token, visit 
+`Synoptic's customer page <https://developers.synopticdata.com/signup/>`_. Don't want to open an account?
+ No problem! MetPy has an open access account that allows you to make requests here without 
+ specifying a token. But be aware that request concurrency limits may result in slower data return
+ times. If this is a concern then your best option is open an account and define the optional *token* 
+ argument.
 
-And of course, you'll need an idea of the data you're interested in so you can specify
+Of course, you'll need an idea of the data you're interested in so you can specify
 the parameters for your request! Having trouble finding your station? Browse
 `Synoptic's Data Explorer <https://explore.synopticdata.com>`_ to get a sense of the data
 they have to offer.
@@ -75,14 +80,14 @@ station = {'state': 'UT',
            'network': ['1', '4'],
            'vars': ['air_temp', 'wind_speed', 'wind_direction']}
 time = {'within': 120}
-token = 'demotoken'
 
 #########################################################################
-# Instantiate the SynopticData class with these variables and your Synoptic Data token:
-latest = SynopticData(token, service, station, time)
+# Instantiate the SynopticData class with these variables. Have your own token? include the 
+# optional token argument (*token=your_special_token*).
+latest = SynopticData(service, station, time)
 
 #########################################################################
-# And make the request (as part of the request process, the request url sent
+# Make the request (as part of the request process, the request url sent
 # to Synoptic's API is printed):
 ut_data, ut_units, ut_meta = latest.request_data()
 
@@ -134,7 +139,7 @@ opt_params = {'obtimezone': 'local',
 
 #########################################################################
 # Once again, instantiate the class and make the request:
-nearest = SynopticData(token, service, station, time, opt_params)
+nearest = SynopticData(service, station, time, opt_params)
 portland_data, portland_units, portland_meta = nearest.request_data()
 
 #########################################################################
@@ -153,7 +158,7 @@ station = {'stid': ['KSLC', 'WBB'],
 time = {'start': 202108030000,
         'end': 202108040000}
 
-timeseries = SynopticData(token, service, station, time)
+timeseries = SynopticData(service, station, time)
 stn_data, stn_units, stn_meta = timeseries.request_data()
 
 #########################################################################
@@ -176,49 +181,3 @@ stn_data.loc[idx['KSLC',t0:t1], 'air_temp_set_1']
 #########################################################################
 # Slicing on the second level (time) can also be performed across all stations:
 stn_data.loc[idx[:, t0:t1], 'air_temp_set_1']
-
-#########################################################################
-# Precip service
-# --------------
-# Requests to the precipitation service follow the same general procedure as those above, but
-# some differences exist to deal with the fact that precipitation must be measured over an interval of time.
-# Users should define *pmode* according to the precip output desired (see the
-# API docs for more info). The returned dataframe indices also slightly differ, and
-# identify the interval (*first_report*, *last_report*) over which the results are measured/computed. Here's an
-# example returning the precipitation totals from stations in a 30 mile radius
-# of the SeaTac airport over a 3 day period in January, 2020.
-service = 'Precip'
-station = {'radius': ['KSEA',30]}
-time = {'start': 202001200000,
-        'end': 202001230000}
-opt_params = {'pmode': 'totals',
-              'obtimezone': 'local'}
-precip = SynopticData('demotoken', service, station, time, opt_params)
-precip_data, precip_units, precip_meta = precip.request_data()
-precip_data.sort_values('precipitation', ascending=False).iloc[0:10]
-
-#########################################################################
-# *count* is the measurement counts during time interval, and *precipitation* is
-# the precipitation total for each station in units of millimeters (Synoptic default):
-precip_units
-
-#########################################################################
-# Interval- or accumulation-based precipitation over user-specified time windows can
-# be requested using *pmode=intervals* and *pmode=last*.
-opt_params = {'pmode': 'last',
-              'accum_hours': [0,24,48,72],
-              'obtimezone': 'local'}
-
-#########################################################################
-# Parameter dictionaries are attached to the class object to facilitate updating
-precip.opt_params = opt_params
-precip_data, precip_units, precip_meta = precip.request_data()
-
-#########################################################################
-# In these instances, the resulting dataframe contains an additional index column
-# to facilitate slicing, similar to the TimeSeries example above:
-precip_data
-
-#########################################################################
-# 24-hour precipitation totals ending at *time['end']* for each station:
-precip_data.loc[idx[:,24,:,:]]

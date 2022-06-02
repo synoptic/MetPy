@@ -347,7 +347,8 @@ class SynopticData():
 
         # If request returns 0 results, print as such & exit
         if self.data['SUMMARY']['RESPONSE_CODE'] != 1:
-            sys.exit(self.data['SUMMARY']['RESPONSE_MESSAGE'])
+            raise RuntimeError(self.data['SUMMARY']['RESPONSE_MESSAGE'])
+
         # Else build out data & metadata dataframes, and units dic
         else:
             if self.service != 'precip':
