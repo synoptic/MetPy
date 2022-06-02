@@ -11,13 +11,13 @@ aggregating and disseminating station-based Earth data. Born out of the Universi
 of Utah's `MesoWest program <https://mesowest.utah.edu/>`_, and now serving as one
 of the National Mesonet Program's lead subcontractors, Synoptic provides access to
 real-time and historical data from >100,000 stations globally through it's
-`API services <https://synopticdata.com/mesonet-api>`_. Supporting educational and
+`Mesonet API services <https://synopticdata.com/mesonet-api>`_. Supporting educational and
 research initiatives is central to the company's mission.
 
 MetPy includes capabilities to leverage station-based meteorological data by seamlessly
 integrating with Synoptic's API data services. Tailor your query to your specifications,
 and the package will send a data request to Synoptic's API, parse the returned data, and
-treat units in a pint-compatible format to facilitate incorporating Synoptic's deep database
+treat units in a pint-compatible format to facilitate incorporating Synoptic's data aggregation services
 in your MetPy workflow.
 
 In this tutorial we'll provide an introduction to requesting data and working with

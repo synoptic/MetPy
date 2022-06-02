@@ -3,8 +3,8 @@ import pandas as pd
 import json
 import urllib.request
 import urllib.parse
-import numpy as np
-from datetime import datetime,timezone,timedelta
+# import numpy as np
+# from datetime import datetime,timezone,timedelta
 import sys
 import copy
 
@@ -62,7 +62,7 @@ def return_stn_df(data, date_format, qc_flag, service):
 
         # Data
         data_out = data[i]['OBSERVATIONS'].copy()
-        if service == 'TimeSeries':
+        if service == 'timeseries':
             datetime = pd.to_datetime(data_out['date_time'], format=(date_format))
             del data_out['date_time']
             multi_index = pd.MultiIndex.from_product([[stid], datetime],
@@ -184,6 +184,16 @@ def variable_details(data):
         derived_from_details.update({stid: derived_from})
     return position_details, derived_from_details
 
+def case_insensitive(input_dic):
+    '''
+    '''
+    lower_case_dic = {}
+    for k,v in input_dic.items():        
+        try:
+            lower_case_dic[k.lower()] = v.lower()
+        except AttributeError:
+            lower_case_dic[k.lower()] = v
+    return lower_case_dic
 
 @exporter.export
 class SynopticData():
@@ -212,49 +222,50 @@ class SynopticData():
             formatting, qc selections and variable units. Dictionary keys are parameters,
             values are parameter value string
     """
-    def __init__(self, token, service, station, time={}, opt_params={}):
+    def __init__(self, service, station, time={}, opt_params={}, token=''):
+        # Eliminate any case sensitivity
+        service = service.lower()
+        station = case_insensitive(station)
+        time = case_insensitive(time)
+        opt_params = case_insensitive(opt_params)
+
         # Confirm the service is valid
-        if service == 'TimeSeries':
-            valid_time_keys = ['start', 'end', 'recent']
+        if service == 'timeseries':
+            self.valid_time_keys = ['start', 'end', 'recent']
             self.url0 = "https://api.synopticdata.com/v2/stations/timeseries?"
             self.service = service
-        elif service == 'Latest':
-            valid_time_keys = ['within', 'minmax', 'minmaxtype']
+        elif service == 'latest':
+            self.valid_time_keys = ['within', 'minmax', 'minmaxtype']
             self.url0 = "https://api.synopticdata.com/v2/stations/latest?"
             self.service = service
-        elif service == 'NearestTime':
-            valid_time_keys = ['within', 'attime']
+        elif service == 'nearesttime':
+            self.valid_time_keys = ['within', 'attime']
             self.url0 = "https://api.synopticdata.com/v2/stations/nearesttime?"
             self.service = service
-        elif service == 'Precip':
-            valid_time_keys = ['start', 'end', 'recent']
+        elif service == 'precip':
+            self.valid_time_keys = ['start', 'end', 'recent']
             self.url0 = "https://api.synopticdata.com/v2/stations/precip?"
             self.service = service
         else:
             sys.exit('Invalid Service')
-
-        # Confirm the station keys are valid
-        stn_keys = ['stid','state','country','nwszone','nwsfirezone','cwa',\
-                    'gacc','subgacc','county','vars','varsoperator','network',\
-                    'radius','bbox','status','complete','fields','networkimportance',\
-                    'spacing']
-        if station:
-            invalid_stns = set(station.keys()) - set(stn_keys)
-            if len(invalid_stns) > 0:
-                sys.exit('Invalid station parameters: {}'.format(invalid_stns))
-            else:
-                self.station = copy.deepcopy(station)
+        self.station = station
+        self.time = time
+        if token != '':
+            self.token = token
         else:
-            sys.exit('At least one station parameter is required')
+            # Grab a token from the MetPy user account
+            try:
+                with urllib.request.urlopen("https://api.synopticdata.com/metpy-token/v1") as response:
+                    self.token = response.read().decode("utf-8")
+            except:
+                raise RuntimeError('Error fetching token. Contact Synoptic support')
 
-        # Confirm time keys are valid
-        invalid_time = set(time.keys()) - set(valid_time_keys)
-        if len(invalid_time) > 0:
-            sys.exit('Invalid time parameters: {}'.format(invalid_time))
-        else:
-            self.time = time
-        self.token = token
         self.opt_params = opt_params
+        # Store valid station keys
+        self.valid_station_keys = ['stid','stids','state','country','nwszone','nwsfirezone','cwa',\
+                            'gacc','subgacc','county','vars','varsoperator','network',\
+                            'radius','bbox','status','complete','fields','networkimportance',\
+                            'spacing']
 
     def request_data(self):
         """Build url string, send API data request, and return parsed data
@@ -272,8 +283,30 @@ class SynopticData():
                 data_df. qc_df returns if 'qc_flag' or 'qc' are set to 'on' in
                 opt_params. For qc details, see https://developers.synopticdata.com/about/qc/
         """
+        # Confirm the service hasn't been changed:
+        service_url = self.url0.split('/')[-1]
+        print(f'Service url is {service_url}')
+
+        if service_url[:-1] != self.service.lower():    
+            raise ValueError(f'Instantiate a new class for a different API service')
+        
+        # Catch invalid station requests
+        if self.station:
+            invalid_stns = set(self.station.keys()) - set(self.valid_station_keys)
+            if len(invalid_stns) > 0:
+                raise ValueError(f'{invalid_stns} is not a valid station selector')
+            else:
+                self.station = copy.deepcopy(self.station)
+        else:
+            raise ValueError(f'At least one station selector is required')
+        
+        # Catch invalid time keys
+        invalid_time = set(self.time.keys()) - set(self.valid_time_keys)
+        if len(invalid_time) > 0:
+            raise ValueError(f'{invalid_time} is not a valid time parameter')
+
         # Default is to call on derived precip in TimeSeries service unless explicitly set to 0
-        if 'vars' in self.station.keys() and self.service == 'TimeSeries':
+        if 'vars' in self.station.keys() and self.service == 'timeseries':
             if 'precip' in self.station['vars'] and 'precip' not in self.opt_params.keys():
                 self.opt_params['precip'] = 1
 
@@ -317,7 +350,7 @@ class SynopticData():
             sys.exit(self.data['SUMMARY']['RESPONSE_MESSAGE'])
         # Else build out data & metadata dataframes, and units dic
         else:
-            if self.service != 'Precip':
+            if self.service != 'precip':
                 data_df, meta_df, qc_df = return_stn_df(self.data['STATION'], time_format, self.qc_flag, self.service)
                 position, derived_from = variable_details(self.data['STATION'])
                 self.variable_position = position
