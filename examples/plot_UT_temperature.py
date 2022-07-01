@@ -37,7 +37,7 @@ station = {'state': 'UT',
 time = {'within': 120}
 opt_params = {'obtimezone': 'local',
               'units': 'temp|F'}
-latest = SynopticData('demotoken', service, station, time, opt_params)
+latest = SynopticData(service, station, time, opt_params)
 ut_data, ut_units, ut_meta  = latest.request_data()
 
 ######################################################################

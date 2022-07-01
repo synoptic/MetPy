@@ -39,11 +39,11 @@ Synoptic Data offers four primary API services for accessing data:
 Synoptic's Open Access Tier provides free and unrestricted access to all public station data in Time 
 Series, Nearest Time, and Latest Services. Data requests to these API endpoints require a token 
 associated with a user account. To open an account and fetch a token, visit 
-`Synoptic's customer page <https://developers.synopticdata.com/signup/>`_. Don't want to open an account?
- No problem! MetPy has an open access account that allows you to make requests here without 
- specifying a token. But be aware that request concurrency limits may result in slower data return
- times. If this is a concern then your best option is open an account and define the optional *token* 
- argument.
+`Synoptic's customer page <https://developers.synopticdata.com/signup/>`_. 
+Don't want to open an account? No problem! MetPy has an open access account that allows you to 
+make requests here without specifying a token. But be aware that request concurrency limits 
+may result in slower data return times. If this is a concern then your best option is open an 
+account and define the optional ``token`` argument.
 
 Of course, you'll need an idea of the data you're interested in so you can specify
 the parameters for your request! Having trouble finding your station? Browse
@@ -83,7 +83,7 @@ time = {'within': 120}
 
 #########################################################################
 # Instantiate the SynopticData class with these variables. Have your own token? include the 
-# optional token argument (*token=your_special_token*).
+# optional token argument (``token=your_special_token``).
 latest = SynopticData(service, station, time)
 
 #########################################################################
