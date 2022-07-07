@@ -41,8 +41,8 @@ Series, Nearest Time, and Latest Services. Data requests to these API endpoints 
 associated with a user account. To open an account and fetch a token, visit 
 `Synoptic's customer page <https://developers.synopticdata.com/signup/>`_. 
 Don't want to open an account? No problem! MetPy has an open access account that allows you to 
-make requests here without specifying a token. But be aware that request concurrency limits 
-may result in slower data return times. If this is a concern then your best option is open an 
+make requests without specifying a token. But be aware that request concurrency limits 
+may result in slower data return times. If this is a concern then your best option is to open an 
 account and define the optional ``token`` argument.
 
 Of course, you'll need an idea of the data you're interested in so you can specify
@@ -60,21 +60,26 @@ Ok, let's get started!
 from metpy.remote import SynopticData
 from metpy.units import units
 import pandas as pd
+import matplotlib.pyplot as plt
 
 #########################################################################
 # Latest Service
 # --------------
 # The parameters to be specified in an API request are detailed in the links above
 # for each service. Many parameters are identical across services. In this SynopticData
-# package, we broadly group parameters into dictionaries relating to 1) station/variable,
-# 2) time, and 3) optional arguments. *Parameter:selector* request arguments are
-# specified as *key:value* dictionary pairs.
+# package, we broadly group parameters into three dictionaries: 1) station/variable selectors, 
+# which are defined in the API *station selection parameters*, 2) time selectors which correspond
+# to the ``start``, ``end``, ``recent``, and ``within`` API parameters, and 3) optional parameters,
+# as specified by the API *Optional Parameters*. The *&parameter=selector* API request arguments are
+# specified as *key:value* dictionary pairs here.
 #
 # Let's begin with a *Latest* service example, and query the most recent (within 2 hrs)
 # temperature, wind speed, and wind direction over the state of Utah. Further, let's
-# limit our query to stations in the NWS and Utah DOT networks.
+# limit our query to stations in the NWS and Utah DOT networks. These networks have 
+# `network ids <https://developers.synopticdata.com/about/station-providers/>`
+# 1 and 4 in Synoptic's system.
 
-# Begin by defining the service, station and time dictionaries, and user token.
+# Begin by defining the service, station and time dictionaries.
 service = 'Latest'
 station = {'state': 'UT',
            'network': ['1', '4'],
@@ -120,9 +125,9 @@ print(sample_temperature)
 # -------------------
 # The Nearest Time service permits querying data nearest to a specified date/time.
 # In this example, we'll query air temperature from Oregon's Multnomah County (encompassing
-# Portland) during the June heat wave.
+# the Portland metro area) during the June, 2021 heat wave.
 #
-# The set-up and request are very similar to Latest:
+# The set-up and request are very similar to the *Latest* example above:
 service = 'NearestTime'
 station = {'county': 'multnomah',
            'state': 'OR',
@@ -150,7 +155,7 @@ portland_data.sort_values('air_temp_value_1', ascending=False).iloc[0:10]
 # TimeSeries Service
 # ------------------
 # The Time Series service motivates the usage of Panda's MultiIndex data structure.
-# Let's illustrate this by querying data from the SLC airport and William Brown Building
+# Let's illustrate this by querying data from the Salt Lake City Airport and William Brown Building
 # (home of Univ. Utah's Atmospheric Science Dept).
 service = 'TimeSeries'
 station = {'stid': ['KSLC', 'WBB'],
@@ -181,3 +186,69 @@ stn_data.loc[idx['KSLC',t0:t1], 'air_temp_set_1']
 #########################################################################
 # Slicing on the second level (time) can also be performed across all stations:
 stn_data.loc[idx[:, t0:t1], 'air_temp_set_1']
+
+#########################################################################
+# Basic Derived Precipitation
+# ---------------------------
+# The precipitation reports aggregated by Synoptic come in a variety of formats. For instance, 
+# stations may measure annually accumulating precip, precip accumulation over regular intervals (e.g. 1 hr),
+# or daily accumulationg since local midnight. Synoptic simplifies the task of working with these 
+# data by processing the raw precipitation in its many formats into a single, uniform format. 
+# This product is Synoptic's `Basic Derived Precipitation <https://developers.synopticdata.com/about/precipitation/>`,
+# and it is freely available through the Time Series API service. 
+
+#########################################################################
+# Let's illustrate with an example. Stations TT350 and E0591 lie within ~15 miles of each other. But
+# TT350 measures annually accumulating precipitation, while EO591 measures precipitation since local midnight.
+service = 'Timeseries'
+station = {'stids': ['TT350','E0591']}
+time = {'start': 202206100000,
+        'end': 202206130000}
+precip = SynopticData(service, station, time)
+raw_precip_data, raw_precip_units, precip_meta  = precip.request_data()
+E0591_raw = raw_precip_data.loc['E0591']
+TT350_raw = raw_precip_data.loc['TT350']
+
+#########################################################################
+# The different formats makes working with the raw data from both of those stations challenging:
+fig1 = plt.figure(1)
+ax1_a = fig1.add_subplot(211)
+ax1_a.plot(E0591_raw.index, E0591_raw['precip_accum_since_local_midnight_set_1'], 'k.-')
+ax1_a.set_title('E0591: precip since local midnight')
+ax1_a.set_ylabel(raw_precip_units['precip_accum_since_local_midnight_set_1'])
+ax1_a.set_xticklabels([])
+ax1_b = fig1.add_subplot(212)
+ax1_b.plot(TT350_raw.index, TT350_raw['precip_accum_set_1'], 'k.-')
+ax1_b.set_title('TT350: Annually accumulating precip')
+ax1_b.set_ylabel(raw_precip_units['precip_accum_set_1'])
+ax1_b.set_xlabel('Date/time (UTC)')
+
+#########################################################################
+# To request basic derived precip data, set the optional ``precip`` argument to 1.
+opt_params = {'precip': 1}
+derived_precip = SynopticData(service, station, time, opt_params)
+derived_precip_data, derived_precip_units, precip_meta  = derived_precip.request_data()
+E0591_derived = derived_precip_data.loc['E0591']
+TT350_derived = derived_precip_data.loc['TT350']
+
+#########################################################################
+# The raw precipitation variables are replaced by ``precip_accumulated`` and ``precip_intervals``
+# derived variables. ``precip_intervals`` is the precipitation accumulated over the interval between
+# station measurements. ``precip_accumulated`` is the cumulative sum of all interval values over the
+# requested time period. The uniform format makes it much easier to work with the data from these
+# stations in different networks, and with different measurement formats.
+fig2 = plt.figure(2)
+ax = fig2.add_subplot(111)
+ax.plot(E0591_derived.index, E0591_derived['precip_accumulated_set_1d'], 'k.-', label='E0591')
+ax.plot(TT350_derived.index, TT350_derived['precip_accumulated_set_1d'], 'r.-', label='TT350')
+ax.set_ylabel('precipitation (%s)'%derived_precip_units['precip_accumulated_set_1d'])
+ax.set_xlabel('Date/time (UTC)')
+ax.legend()
+
+
+
+
+
+
+
+

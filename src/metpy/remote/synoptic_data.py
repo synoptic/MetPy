@@ -12,7 +12,6 @@ from ..package_tools import Exporter
 
 exporter = Exporter(globals())
 
-
 # Need to map incompatible Synoptic units to a form that can be read by Pint.
 # Simple dictionary is easier in this case than adding pint alias' since we
 # return unit strings and not pint unit definitions
@@ -102,6 +101,8 @@ def return_stn_df(data, date_format, qc_flag, service):
 
 
 def return_precip_df(data, date_format, pmode):
+    '''
+    '''
     meta_list = []
     for i in range(len(data)):
         # Metadata
@@ -204,8 +205,6 @@ class SynopticData():
 
     Attributes
     ----------
-    token : str
-            User token to access Synoptic Data's API
     service : str
             Synoptic service to query. 'TimeSeries', 'Latest', 'NearestTime', or 'Precip'
     station : dic
@@ -221,6 +220,8 @@ class SynopticData():
             Optional parameters to pass to url call. This includes time-specific
             formatting, qc selections and variable units. Dictionary keys are parameters,
             values are parameter value string
+    token : str (optional)
+            User token to access Synoptic Data's API
     """
     def __init__(self, service, station, time={}, opt_params={}, token=''):
         # Eliminate any case sensitivity
