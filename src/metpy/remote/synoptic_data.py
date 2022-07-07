@@ -27,8 +27,10 @@ units_map = {'Celsius': 'degC',
              'ug/m3': 'ug/m**3',
              'ft3/s': 'ft**3/s'}
 
-
 def build_query_string(qsp_dic):
+    """Collapse a dictionary of parameter: selector pairs into a single string of
+        query parameters
+    """
     # Convert any lists to comma-separated strings
     for k in qsp_dic.keys():
         if isinstance(qsp_dic[k], list):
@@ -37,10 +39,22 @@ def build_query_string(qsp_dic):
     query_string = urllib.parse.urlencode(qsp_dic)
     return query_string
 
+def return_station_df(data, date_format, qc_flag, service):
+    """Build pandas dataframes for data and metadata using json response from 
+        requests to Time Series, Nearest, and Latest services
 
-def return_stn_df(data, date_format, qc_flag, service):
-    '''
-    '''
+    Parameters:
+        data: dict, json response from API request
+        date_format: str, requested date format
+        qc_flag: bool, True if qc_flag is on. Else False.
+        service: str, Synoptic web service requested
+    
+    Returns:
+        data_df: pandas DataFrame, data return from all station
+        meta_df: pandas DataFrame, station metadata
+        qc_df: pandas DataFrame, qc flags associated with variables (only 
+            returned if qc is requested)
+    """
     meta_list = []
     for i in range(len(data)):
         # Metadata
@@ -75,7 +89,7 @@ def return_stn_df(data, date_format, qc_flag, service):
         df = pd.DataFrame(data_out, index=multi_index)
 
         # QC
-        if qc_flag:
+        if qc_flag is True:
             qc_out = {}
             if 'QC' in data[i].keys():
                 qc_out = data[i]['QC'].copy()
@@ -91,18 +105,31 @@ def return_stn_df(data, date_format, qc_flag, service):
             data_df = pd.concat([data_df, pd.DataFrame(data_out, index=multi_index)], axis=0)
             qc_df = pd.concat([qc_df, stn_qc], axis=0)
 
+    #Build metadata dataframe from list
     meta_df = pd.DataFrame(meta_list, columns=["stid", "lon", "lat", "elev"])
     meta_df.set_index('stid', inplace=True)
 
-    # Sort the resulting dataframe by time
+    # Sort the resulting data dataframe by time
     data_df.sort_index(inplace=True)
 
     return data_df, meta_df, qc_df
 
-
 def return_precip_df(data, date_format, pmode):
-    '''
-    '''
+    """ Build pandas dataframes for precip data and metadata from the Synoptic API
+        json response
+
+        Note: as the function name implies. This should only operate on precip data.
+    
+    Parameters:
+        data: dict, json response from API request
+        date_format: str, requested date format
+        pmode: str, precip mode requested ('totals, 'last', 'intervals').
+    
+    Returns:
+        data_df: pandas DataFrame, data return from all station
+        unit_dic: dict, units associated with variables in data_df
+        meta_df: pandas DataFrame, station metadata
+    """
     meta_list = []
     for i in range(len(data)):
         # Metadata
@@ -164,8 +191,11 @@ def return_precip_df(data, date_format, pmode):
 
 
 def variable_details(data):
-    '''
-    '''
+    """Return variable details (e.g. sensor position, variables from which it was derived) if 
+        they exist.
+
+        Note: these get stored as SynopticData class attributes
+    """
     position_details = {}
     derived_from_details = {}
     for i in range(len(data)):
@@ -186,8 +216,10 @@ def variable_details(data):
     return position_details, derived_from_details
 
 def case_insensitive(input_dic):
-    '''
-    '''
+    """Eliminate case sensitivity of dictionary values. 
+    
+    Called on for preprocessing of SynopticData class attributes.
+    """
     lower_case_dic = {}
     for k,v in input_dic.items():        
         try:
@@ -319,11 +351,11 @@ class SynopticData():
 
         # Check if there is a qc_flag request
         if ('qc_flag','on') in self.opt_params.items():
-            self.qc_flag = 1
+            self.qc_flag = True
         elif ('qc','on') in self.opt_params.items() and ('qc_flag','off') not in self.opt_params.items():
-            self.qc_flag = 1
+            self.qc_flag = True
         else:
-            self.qc_flag = None
+            self.qc_flag = False
 
         # Build single dictionary for url query string
         qsp_dic = self.station.copy()
@@ -353,7 +385,7 @@ class SynopticData():
         # Else build out data & metadata dataframes, and units dic
         else:
             if self.service != 'precip':
-                data_df, meta_df, qc_df = return_stn_df(self.data['STATION'], time_format, self.qc_flag, self.service)
+                data_df, meta_df, qc_df = return_station_df(self.data['STATION'], time_format, self.qc_flag, self.service)
                 position, derived_from = variable_details(self.data['STATION'])
                 self.variable_position = position
                 self.variable_derived_from = derived_from
