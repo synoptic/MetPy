@@ -79,7 +79,8 @@ def test_qc():
             'end': 202206020000}
     opt_params = {'qc': 'on'}
     request = SynopticData(service, station, time, opt_params)
-    data, units, meta, qc = request.request_data()
+    data, units, meta, qc, qc_summary = request.request_data()
     assert isinstance(qc, pd.DataFrame) == True
+    assert isinstance(qc_summary,dict)
 
     

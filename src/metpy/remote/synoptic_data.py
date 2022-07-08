@@ -307,7 +307,7 @@ class SynopticData():
         -------
         data_df : Pandas DataFrame
                 Data columns multi-indexed by station and dattim
-        units_dic : dic
+        units_dic : dict
                 Units (string value) for each data column (key) in data_df
         meta_df : Pandas DataFrame
                 Station latitude, longitude, and elevation. Indexed by station id
@@ -315,6 +315,9 @@ class SynopticData():
                 qc_flags for each variable, multi-indexed in the same fashion as
                 data_df. qc_df returns if 'qc_flag' or 'qc' are set to 'on' in
                 opt_params. For qc details, see https://developers.synopticdata.com/about/qc/
+        qc_summary : dict (optional)
+                QC summary, including description of flags in qc_df. Returns only if 
+                'qc_flag' or 'qc' are set to 'on'
         """
         # Confirm the service hasn't been changed:
         service_url = self.url0.split('/')[-1]
@@ -407,11 +410,13 @@ class SynopticData():
                         unit_dic.update({column: unit})
 
             if self.qc_flag:
+                # Build qc_summary dictionary
+                qc_summary = self.data['QC_SUMMARY']
                 # If there are no columns in the qc df, there are no flags. Reset
                 # to None
                 if len(qc_df.columns) == 0:
-                    qc_df = None
+                    qc_df = pd.DataFrame(None)
                 self.qc_df = qc_df
-                return data_df, unit_dic, meta_df, qc_df
+                return data_df, unit_dic, meta_df, qc_df, qc_summary
             else:
                 return data_df, unit_dic, meta_df
